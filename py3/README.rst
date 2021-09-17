@@ -9,12 +9,8 @@ bisos.bx-bases Scripts
 Overview
 ========
 
-bx-bases: python scripts (Interactive Command Modules – ICM) are used
-for bootstrapping the BISOS (ByStar Internet Services OS) environment.
-
-bx-pip and bx-bases are ICM scripts that will normally be installed in
-/usr/local/bin. bx-bases then can create /bystar and that allows for
-bx-pip to thereafter to install into bystar instead of /usr/local/bin.
+bpo: python library and scripts (Interactive Command Modules – ICM) are
+used to manage abstrations of ByStar Portable Objects.
 
 Support
 =======
@@ -37,12 +33,11 @@ Installation
 
 ::
 
-   sudo pip install bisos.bx-bases
+   sudo pip install bisos.bpo
 
 Usage
 =====
 
 ::
 
-   /usr/local/bin/bx-bases
-   /usr/local/bin/bx-pip
+   bin/bpoManage.py
