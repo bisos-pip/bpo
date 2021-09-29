@@ -3,7 +3,9 @@
 * *[Summary]* :: A /library/ Beginning point for development of new ICM oriented libraries.
 """
 
-icmInfo = { 'moduleDescription': ["""
+import typing
+
+icmInfo: typing.Dict[str, typing.Any] = { 'moduleDescription': ["""
 *       [[elisp:(org-show-subtree)][|=]]  [[elisp:(org-cycle)][| *Description:* | ]]
 **  [[elisp:(org-cycle)][| ]]  [Xref]          :: *[Related/Xrefs:]*  <<Xref-Here->>  -- External Documents  [[elisp:(org-cycle)][| ]]
 
@@ -30,11 +32,11 @@ icmInfo['moduleStatus'] = """
 *  [[elisp:(org-cycle)][| *ICM-INFO:* |]] :: Author, Copyleft and Version Information
 """
 ####+BEGIN: bx:icm:py:name :style "fileName"
-icmInfo['moduleName'] = "newIcmLib"
+icmInfo['moduleName'] = "bpo"
 ####+END:
 
 ####+BEGIN: bx:icm:py:version-timestamp :style "date"
-icmInfo['version'] = "202109163442"
+icmInfo['version'] = "202109272532"
 ####+END:
 
 ####+BEGIN: bx:icm:py:status :status "Production"
@@ -59,7 +61,7 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 
 ####+BEGIN: bx:icm:python:top-of-file :partof "bystar" :copyleft "halaal+minimal"
 """
-*  This file:/bisos/git/auth/bxRepos/bisos/bpip1/bin/newIcmLib.py :: [[elisp:(org-cycle)][| ]]
+*  This file:/bisos/git/auth/bxRepos/bisos-pip/bpo/py3/bisos/bpo/bpo.py :: [[elisp:(org-cycle)][| ]]
  is part of The Libre-Halaal ByStar Digital Ecosystem. http://www.by-star.net
  *CopyLeft*  This Software is a Libre-Halaal Poly-Existential. See http://www.freeprotocols.org
  A Python Interactively Command Module (PyICM).
@@ -82,18 +84,18 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 
 ####+BEGIN: bx:icm:python:icmItem :itemType "=Imports=" :itemTitle "*IMPORTS*"
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  =Imports=      :: *IMPORTS*  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  =Imports=  :: *IMPORTS*  [[elisp:(org-cycle)][| ]]
 """
 ####+END:
 
 
 import os
-import pwd
-import grp
+#import pwd
+#import grp
 import collections
 import enum
 
-####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmBleepG.py"
+####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmG.py"
 from unisos import ucf
 from unisos import icm
 
@@ -102,12 +104,10 @@ icm.unusedSuppressForEval(ucf.__file__)  # in case icm and ucf are not used
 G = icm.IcmGlobalContext()
 # G.icmLibsAppend = __file__
 # G.icmCmndsLibsAppend = __file__
-
-from blee.icmPlayer import bleep
 ####+END:
 
-from bisos.platform import bxPlatformConfig
-from bisos.platform import bxPlatformThis
+# from bisos.platform import bxPlatformConfig
+# from bisos.platform import bxPlatformThis
 
 
 ####+BEGIN: bx:dblock:python:section :title "Start Your Sections Here"
@@ -118,7 +118,7 @@ from bisos.platform import bxPlatformThis
 
 ####+BEGIN: bx:dblock:python:enum :enumName "bpoId_Type" :comment ""
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Enum           :: /bpoId_Type/  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Enum       :: /bpoId_Type/  [[elisp:(org-cycle)][| ]]
 """
 @enum.unique
 class bpoId_Type(enum.Enum):
@@ -132,7 +132,7 @@ class bpoId_Type(enum.Enum):
 
 ####+BEGIN: bx:dblock:python:enum :enumName "bpo_Type" :comment ""
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Enum           :: /bpo_Type/  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Enum       :: /bpo_Type/  [[elisp:(org-cycle)][| ]]
 """
 @enum.unique
 class bpo_Type(enum.Enum):
@@ -142,7 +142,7 @@ class bpo_Type(enum.Enum):
 
 ####+BEGIN: bx:dblock:python:enum :enumName "bpo_Purpose" :comment ""
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Enum           :: /bpo_Purpose/  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Enum       :: /bpo_Purpose/  [[elisp:(org-cycle)][| ]]
 """
 @enum.unique
 class bpo_Purpose(enum.Enum):
@@ -154,7 +154,7 @@ class bpo_Purpose(enum.Enum):
 
 ####+BEGIN: bx:dblock:python:func :funcName "bpoIdType_obtain" :funcType "Obtain" :retType "str" :deco "" :argsList "bpoId"
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Func-Obtain    :: /bpoIdType_obtain/ retType=str argsList=(bpoId)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-Obtain :: /bpoIdType_obtain/ retType=str argsList=(bpoId)  [[elisp:(org-cycle)][| ]]
 """
 def bpoId_Type_obtain(
     bpoId,
@@ -163,21 +163,22 @@ def bpoId_Type_obtain(
     """
 ** NOT yet -- ea-NUM means old ByStarUid, A pure number means nativeSO. nonNumber means foreignBxO
 """
+    icm.unusedSuppress(bpoId)
     return bpoId_Type.acctId
 
 
-####+BEGIN: bx:dblock:python:func :funcName "bpoBaseDir_obtain" :funcType "Obtain" :retType "str" :deco "" :argsList "bpoId"
+####+BEGINNOT: bx:dblock:python:func :funcName "bpoBaseDir_obtain" :funcType "Obtain" :retType "str" :deco "" :argsList "bpoId"
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Func-Obtain    :: /bpoBaseDir_obtain/ retType=str argsList=(bpoId)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-Obtain :: /bpoBaseDir_obtain/ retType=str argsList=(bpoId)  [[elisp:(org-cycle)][| ]]
 """
 def bpoBaseDir_obtain(
-    bpoId,
-):
+    bpoId: str,
+) -> str:
 ####+END:
     """
 **
 """
-    bpoBaseDir = None
+    bpoBaseDir = ""
     idType = bpoId_Type_obtain(bpoId)
 
     if idType == bpoId_Type.path:
@@ -185,7 +186,10 @@ def bpoBaseDir_obtain(
     elif idType == bpoId_Type.homeDir:
         bpoBaseDir = bpoId
     elif idType == bpoId_Type.acctId:
-        print("UnImplemented - NOTYET")
+        bpoBaseDir = os.path.expanduser(f"~{bpoId}")
+        if bpoBaseDir == format(f"~{bpoId}"):
+            icm.EH_problem_usageError(f"bpoId={bpoId} is not a valid account")
+            bpoBaseDir = ""
     else:
         icm.EH_problem_usageError("")
 
@@ -193,17 +197,133 @@ def bpoBaseDir_obtain(
 
 
 ####+BEGIN: bx:dblock:python:subSection :title "Class Definitions"
-"""
-*  [[elisp:(beginning-of-buffer)][Top]] ================ [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]          *Class Definitions*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
-"""
+
 ####+END:
 
-
-####+BEGIN: bx:dblock:python:class :className "Bpo" :superClass "object" :comment "Expected to be subclassed" :classType "basic"
+####+BEGIN: bx:dblock:python:class :className "EffectiveBpos" :superClass "object" :comment "" :classType "basic"
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Class-basic    :: /Bpo/ object =Expected to be subclassed=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /EffectiveBpos/ object  [[elisp:(org-cycle)][| ]]
+"""
+class EffectiveBpos(object):
+####+END:
+    """
+** Only one instance is created for a given BpoId.
+"""
+    effectiveBposList = {}
+
+    @staticmethod
+    def addBpo(
+            bpoId,
+            bpo
+    ):
+        print(f"Adding bpoId={bpoId} bpo={bpo}")
+        __class__.effectiveBposList.update({bpoId: bpo})
+        return None
+
+    @staticmethod
+    def givenBpoIdObtainBpo(
+            bpoId,
+            BpoClass,
+    ):
+        if bpoId in __class__.effectiveBposList:
+            return __class__.effectiveBposList[bpoId]
+        else:
+            return BpoClass(bpoId)
+
+    @staticmethod
+    def givenBpoIdGetBpo(
+            bpoId,
+    ):
+        print(f"bpoId={bpoId}")
+        if bpoId in __class__.effectiveBposList:
+            return __class__.effectiveBposList[bpoId]
+        else:
+            icm.EH_problem_usageError("")
+            return None
+
+
+####+BEGIN: bx:icm:python:func :funcName "obtainBpo" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "bpoId"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-anyOrNone :: /obtainBpo/ retType=bool argsList=(bpoId)  [[elisp:(org-cycle)][| ]]
+"""
+def obtainBpo(
+    bpoId,
+):
+####+END:
+    return EffectiveBpos.givenBpoIdObtainBpo(bpoId, Bpo)
+
+
+####+BEGIN: bx:dblock:python:class :className "Bpo" :superClass "object" :comment "ByStar Portable Object -- to be subclassed" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /Bpo/ object =ByStar Portable Object -- to be subclassed=  [[elisp:(org-cycle)][| ]]
 """
 class Bpo(object):
+####+END:
+    """
+** Abstraction of the base ByStar Portable Object
+"""
+    def __init__(
+            self,
+            bpoId,
+    ):
+        '''Constructor'''
+        self.bpoId = bpoId
+        EffectiveBpos.addBpo(bpoId, self)
+        self.baseDir = bpoBaseDir_obtain(bpoId)
+
+        self.repo_rbxe()
+        self.repo_bxeTree()
+        self.bpoBases = BpoBases(bpoId)
+        self.bpoBases.bases_update()
+
+    def repo_rbxe(self,):
+        print("self.rbxe")
+
+    def repo_bxeTree(self,):
+        print("self.rbxe")
+
+
+####+BEGIN: bx:dblock:python:class :className "BpoBases" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoBases/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
+"""
+class BpoBases(object):
+####+END:
+    """
+** Abstraction of the base ByStar Portable Object
+"""
+
+    def __init__(
+        self,
+        bpoId,
+    ):
+        self.bpoId = bpoId
+        self.bpo = EffectiveBpos.givenBpoIdGetBpo(bpoId)
+        print(self.bpo)
+        print(self.bpo.__dict__)
+
+    def bases_update(self,):
+        print(f"bases update: {self.bpo.baseDir}")
+        return None
+
+    def varBase_update(self,):
+        return None
+
+    def varBase_obtain(self,):
+        return None
+
+    def tmpBase_update(self,):
+        return None
+
+    def tmpBase_obtain(self,):
+        return None
+
+
+####+BEGIN: bx:dblock:python:class :className "BpoRepo" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoRepo/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
+"""
+class BpoRepo(object):
 ####+END:
     """
 ** Abstraction of the base ByStar Portable Object
@@ -229,6 +349,69 @@ class Bpo(object):
         # )
 
 
+
+####+BEGIN: bx:dblock:python:class :className "BpoRepo_Rbxe" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoRepo_Rbxe/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
+"""
+class BpoRepo_Rbxe(BpoRepo):
+####+END:
+    """
+** Abstraction of the base ByStar Portable Object
+"""
+
+
+    def __init__(
+        self,
+        baseDirType=None,
+        destPathRoot=None,
+        destPathRel=None,
+    ):
+        self.baseDirType=baseDirType
+        self.destPathRoot=destPathRoot
+        self.destPathRel=destPathRel
+
+    def destPathFullGet(self,):
+        return None
+        # return (
+        #     os.path.abspath(
+        #         os.path.join(self.destPathRoot, self.destPathRel)
+        #     )
+        # )
+
+
+####+BEGIN: bx:dblock:python:class :className "BpoRepo_BxeTree" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoRepo_BxeTree/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
+"""
+class BpoRepo_BxeTree(BpoRepo):
+####+END:
+    """
+** Abstraction of the base ByStar Portable Object
+"""
+
+
+    def __init__(
+        self,
+        baseDirType=None,
+        destPathRoot=None,
+        destPathRel=None,
+    ):
+        self.baseDirType=baseDirType
+        self.destPathRoot=destPathRoot
+        self.destPathRel=destPathRel
+
+    def destPathFullGet(self,):
+        return None
+        # return (
+        #     os.path.abspath(
+        #         os.path.join(self.destPathRoot, self.destPathRel)
+        #     )
+        # )
+
+
+
+
 ####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
@@ -238,7 +421,7 @@ class Bpo(object):
 
 ####+BEGIN: bx:dblock:python:func :funcName "commonParamsSpecify" :funcType "ParSpec" :retType "" :deco "" :argsList "icmParams"
 """
-*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(org-tree-to-indirect-buffer)][|>]] [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(beginning-of-buffer)][Top]] [[elisp:(delete-other-windows)][(1)]] || Func-ParSpec   :: /commonParamsSpecify/ retType= argsList=(icmParams)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-ParSpec :: /commonParamsSpecify/ retType= argsList=(icmParams)  [[elisp:(org-cycle)][| ]]
 """
 def commonParamsSpecify(
     icmParams,
@@ -258,14 +441,14 @@ def commonParamsSpecify(
 
 ####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
 """
-*  [[elisp:(beginning-of-buffer)][Top]] ################ [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
+*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
 
 
 ####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_basicAccess" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList ""
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Func-examples  :: /examples_bpo_basicAccess/ =Show/Verify/Update For relevant PBDs= retType=none argsList=nil  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-examples :: /examples_bpo_basicAccess/ =Show/Verify/Update For relevant PBDs= retType=none argsList=nil  [[elisp:(org-cycle)][| ]]
 """
 def examples_bpo_basicAccess():
 ####+END:
@@ -276,8 +459,7 @@ def examples_bpo_basicAccess():
     def menuItem(verbosity): icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity=verbosity) # 'little' or 'none'
     # def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
 
-    oneForeignBxo = "mcmFbxo"
-
+    oneBpo = "pmi_ByD-100001"
 
     # def moduleOverviewMenuItem(overviewCmndName):
     #     icm.cmndExampleMenuChapter('* =Module=  Overview (desc, usage, status)')
@@ -287,25 +469,31 @@ def examples_bpo_basicAccess():
 
     # moduleOverviewMenuItem(bpo_libOverview)
 
-    icm.cmndExampleMenuChapter('*General Dev and Testing CMNDs*')
+    icm.cmndExampleMenuChapter('*General BPO Access And Management Commands*')
 
     cmndName = "bpoIdTypeObtain"
     cmndArgs = ""
-    cps = cpsInit() ; cps['bpoId'] = oneForeignBxo
-    menuItem(verbosity='little')
+    cps = cpsInit() ; cps['bpoId'] = oneBpo
+    menuItem(verbosity='none')
+    menuItem(verbosity='full')
+
+    cmndName = "bpoBaseDirObtain"
+    cmndArgs = ""
+    cps = cpsInit() ; cps['bpoId'] = oneBpo
+    menuItem(verbosity='none')
     menuItem(verbosity='full')
 
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
 """
-*  [[elisp:(beginning-of-buffer)][Top]] ################ [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *ICM Commands*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
+*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *ICM Commands*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
 
 
 ####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "bpoIdTypeObtain" :parsMand "bpoId" :parsOpt "" :argsMin "0" :argsMax "0" :asFunc "" :interactiveP ""
 """
-*  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  ICM-Cmnd       :: /bpoIdTypeObtain/ parsMand=bpoId parsOpt= argsMin=0 argsMax=0 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /bpoIdTypeObtain/ parsMand=bpoId parsOpt= argsMin=0 argsMax=0 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
 """
 class bpoIdTypeObtain(icm.Cmnd):
     cmndParamsMandatory = [ 'bpoId', ]
@@ -340,7 +528,54 @@ class bpoIdTypeObtain(icm.Cmnd):
 
 ####+BEGIN: bx:icm:python:method :methodName "cmndDocStr" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
     """
-**  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(org-tree-to-indirect-buffer)][|>]] [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(beginning-of-buffer)][Top]] [[elisp:(delete-other-windows)][(1)]] || Method-anyOrNone :: /cmndDocStr/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+**  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Method-anyOrNone :: /cmndDocStr/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndDocStr(self):
+####+END:
+        return """
+***** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns the type of bpoId
+"""
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "bpoBaseDirObtain" :parsMand "bpoId" :parsOpt "" :argsMin "0" :argsMax "0" :asFunc "" :interactiveP ""
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /bpoBaseDirObtain/ parsMand=bpoId parsOpt= argsMin=0 argsMax=0 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+"""
+class bpoBaseDirObtain(icm.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 0, 'Max': 0,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        bpoId=None,         # or Cmnd-Input
+    ):
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+
+        callParamsDict = {'bpoId': bpoId, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        bpoId = callParamsDict['bpoId']
+
+####+END:
+        retVal = bpoBaseDir_obtain(bpoId)
+
+        if interactive:
+            icm.ANN_write(f"{retVal}")
+
+        return cmndOutcome.set(
+            opError=icm.notAsFailure(retVal),
+            opResults=retVal,
+        )
+
+####+BEGIN: bx:icm:python:method :methodName "cmndDocStr" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]]  Method-anyOrNone :: /cmndDocStr/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
 """
     @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
     def cmndDocStr(self):
