@@ -5,6 +5,8 @@
 
 import typing
 
+from unisos.icm.icm import EH_problem_usageError, ReturnCode
+
 icmInfo: typing.Dict[str, typing.Any] = { 'moduleDescription': ["""
 *       [[elisp:(org-show-subtree)][|=]]  [[elisp:(org-cycle)][| *Description:* | ]]
 **  [[elisp:(org-cycle)][| ]]  [Xref]          :: *[Related/Xrefs:]*  <<Xref-Here->>  -- External Documents  [[elisp:(org-cycle)][| ]]
@@ -206,7 +208,7 @@ def bpoBaseDir_obtain(
 """
 class EffectiveBpos(object):
 ####+END:
-    """
+    """y
 ** Only one instance is created for a given BpoId.
 """
     effectiveBposList = {}
@@ -214,9 +216,9 @@ class EffectiveBpos(object):
     @staticmethod
     def addBpo(
             bpoId,
-            bpo
+            bpo,
     ):
-        print(f"Adding bpoId={bpoId} bpo={bpo}")
+        print(f"ccc Adding bpoId={bpoId} bpo={bpo}")
         __class__.effectiveBposList.update({bpoId: bpo})
         return None
 
@@ -234,11 +236,22 @@ class EffectiveBpos(object):
     def givenBpoIdGetBpo(
             bpoId,
     ):
-        print(f"bpoId={bpoId}")
+        """Should be renamed to givenBpoIdFindBpo"""
+        print(f"aaa bpoId={bpoId}")
         if bpoId in __class__.effectiveBposList:
             return __class__.effectiveBposList[bpoId]
         else:
             icm.EH_problem_usageError("")
+            return None
+
+    @staticmethod
+    def givenBpoIdGetBpoOrNone(
+            bpoId,
+    ):
+        print(f"bbb bpoId={bpoId}")
+        if bpoId in __class__.effectiveBposList:
+            return __class__.effectiveBposList[bpoId]
+        else:
             return None
 
 
@@ -267,20 +280,20 @@ class Bpo(object):
             bpoId,
     ):
         '''Constructor'''
-        self.bpoId = bpoId
-        EffectiveBpos.addBpo(bpoId, self)
+
         self.baseDir = bpoBaseDir_obtain(bpoId)
+        if not self.baseDir:
+            icm.EH_problem_usageError(f"Missing baseDir for bpoId={bpoId}")
+            return
 
-        self.repo_rbxe()
-        self.repo_bxeTree()
-        self.bpoBases = BpoBases(bpoId)
-        self.bpoBases.bases_update()
+        EffectiveBpos.addBpo(bpoId, self)
 
-    def repo_rbxe(self,):
-        print("self.rbxe")
+        self.bpoId = bpoId
+        self.bpoName = bpoId
 
-    def repo_bxeTree(self,):
-        print("self.rbxe")
+        self.repo_rbxe = BpoRepo_Rbxe(bpoId)
+        self.repo_bxeTree = BpoRepo_BxeTree(bpoId)
+
 
 
 ####+BEGIN: bx:dblock:python:class :className "BpoBases" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
@@ -294,29 +307,37 @@ class BpoBases(object):
 """
 
     def __init__(
-        self,
-        bpoId,
+            self,
+            bpoId,
     ):
-        self.bpoId = bpoId
         self.bpo = EffectiveBpos.givenBpoIdGetBpo(bpoId)
+        if not self.bpo:
+            icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
+            return
+
+        self.bpoId = self.bpo.bpoId
+        self.bpoName = self.bpo.bpoName
+        self.bpoBaseDir = self.bpo.baseDir
+
         print(self.bpo)
         print(self.bpo.__dict__)
 
     def bases_update(self,):
-        print(f"bases update: {self.bpo.baseDir}")
-        return None
+        self.varBase_update()
+        self.tmpBase_update()
+        return
 
     def varBase_update(self,):
-        return None
+        return "NOTYET"
 
     def varBase_obtain(self,):
-        return None
+        return os.path.join(self.bpo.baseDir, "var") # type: ignore
 
     def tmpBase_update(self,):
-        return None
+        return "NOTYET"
 
     def tmpBase_obtain(self,):
-        return None
+        return os.path.join(self.bpo.baseDir, "tmp") # type: ignore
 
 
 ####+BEGIN: bx:dblock:python:class :className "BpoRepo" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
@@ -329,24 +350,14 @@ class BpoRepo(object):
 ** Abstraction of the base ByStar Portable Object
 """
 
-
     def __init__(
-        self,
-        baseDirType=None,
-        destPathRoot=None,
-        destPathRel=None,
+            self,
+            bpoId,
     ):
-        self.baseDirType=baseDirType
-        self.destPathRoot=destPathRoot
-        self.destPathRel=destPathRel
-
-    def destPathFullGet(self,):
-        return None
-        # return (
-        #     os.path.abspath(
-        #         os.path.join(self.destPathRoot, self.destPathRel)
-        #     )
-        # )
+        self.bpo = EffectiveBpos.givenBpoIdGetBpo(bpoId)
+        if not self.bpo:
+            icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
+            return
 
 
 
@@ -359,25 +370,17 @@ class BpoRepo_Rbxe(BpoRepo):
     """
 ** Abstraction of the base ByStar Portable Object
 """
-
-
     def __init__(
-        self,
-        baseDirType=None,
-        destPathRoot=None,
-        destPathRel=None,
+            self,
+            bpoId,
     ):
-        self.baseDirType=baseDirType
-        self.destPathRoot=destPathRoot
-        self.destPathRel=destPathRel
+        super().__init__(bpoId)
+        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
+            icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
+            return
 
-    def destPathFullGet(self,):
-        return None
-        # return (
-        #     os.path.abspath(
-        #         os.path.join(self.destPathRoot, self.destPathRel)
-        #     )
-        # )
+    def info(self,):
+        print(f"rbxeInfo bpoId={self.bpo.bpoId}") # type: ignore
 
 
 ####+BEGIN: bx:dblock:python:class :className "BpoRepo_BxeTree" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
@@ -389,27 +392,17 @@ class BpoRepo_BxeTree(BpoRepo):
     """
 ** Abstraction of the base ByStar Portable Object
 """
-
-
     def __init__(
-        self,
-        baseDirType=None,
-        destPathRoot=None,
-        destPathRel=None,
+            self,
+            bpoId,
     ):
-        self.baseDirType=baseDirType
-        self.destPathRoot=destPathRoot
-        self.destPathRel=destPathRel
+        super().__init__(bpoId)
+        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
+            icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
+            return
 
-    def destPathFullGet(self,):
-        return None
-        # return (
-        #     os.path.abspath(
-        #         os.path.join(self.destPathRoot, self.destPathRel)
-        #     )
-        # )
-
-
+    def info(self,):
+        print("bxeTreeInfo")
 
 
 ####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"

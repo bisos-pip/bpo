@@ -19,7 +19,7 @@ def longDescription():
 
 
 # __version__ = get_version('unisos/icm/__init__.py')
-__version__ = '0.1'
+__version__ = '0.3'
 
 
 requires = [
@@ -32,6 +32,7 @@ requires = [
 
 scripts = [
     "./bin/bpoManage.py",
+    "./bin/bpoAaisManage.py",
 ]
 
 
