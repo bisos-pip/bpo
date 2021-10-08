@@ -218,7 +218,7 @@ class EffectiveBpos(object):
             bpoId,
             bpo,
     ):
-        print(f"ccc Adding bpoId={bpoId} bpo={bpo}")
+        # print(f"ccc Adding bpoId={bpoId} bpo={bpo}")
         __class__.effectiveBposList.update({bpoId: bpo})
         return None
 
@@ -237,7 +237,7 @@ class EffectiveBpos(object):
             bpoId,
     ):
         """Should be renamed to givenBpoIdFindBpo"""
-        print(f"aaa bpoId={bpoId}")
+        # print(f"aaa bpoId={bpoId}")
         if bpoId in __class__.effectiveBposList:
             return __class__.effectiveBposList[bpoId]
         else:
@@ -248,7 +248,7 @@ class EffectiveBpos(object):
     def givenBpoIdGetBpoOrNone(
             bpoId,
     ):
-        print(f"bbb bpoId={bpoId}")
+        # print(f"bbb bpoId={bpoId}")
         if bpoId in __class__.effectiveBposList:
             return __class__.effectiveBposList[bpoId]
         else:
@@ -319,8 +319,8 @@ class BpoBases(object):
         self.bpoName = self.bpo.bpoName
         self.bpoBaseDir = self.bpo.baseDir
 
-        print(self.bpo)
-        print(self.bpo.__dict__)
+        # print(self.bpo)
+        # print(self.bpo.__dict__)
 
     def bases_update(self,):
         self.varBase_update()
@@ -439,11 +439,13 @@ def commonParamsSpecify(
 ####+END:
 
 
-####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_basicAccess" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList ""
+####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_basicAccess" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList "oneBpo"
 """
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-examples :: /examples_bpo_basicAccess/ =Show/Verify/Update For relevant PBDs= retType=none argsList=nil  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-examples :: /examples_bpo_basicAccess/ =Show/Verify/Update For relevant PBDs= retType=none argsList=(oneBpo)  [[elisp:(org-cycle)][| ]]
 """
-def examples_bpo_basicAccess():
+def examples_bpo_basicAccess(
+    oneBpo,
+):
 ####+END:
     """
 ** Common examples.
@@ -452,7 +454,7 @@ def examples_bpo_basicAccess():
     def menuItem(verbosity): icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity=verbosity) # 'little' or 'none'
     # def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
 
-    oneBpo = "pmi_ByD-100001"
+    #oneBpo = "pmi_ByD-100001"
 
     # def moduleOverviewMenuItem(overviewCmndName):
     #     icm.cmndExampleMenuChapter('* =Module=  Overview (desc, usage, status)')
