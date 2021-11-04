@@ -104,17 +104,111 @@ G = icm.IcmGlobalContext()
 # G.icmCmndsLibsAppend = __file__
 ####+END:
 
+from bisos.basics import pattern
+
 #from bisos.icm import clsMethod
 from bisos.icm import fp
 
 #from bisos.bpo import bpo
-from bisos.aals import aalsBpo
+from bisos.pals import palsBpo
 
 ####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
+
+
+####+BEGIN: bx:dblock:python:class :className "BpoFpBase" :superClass "object" :comment "" :classType "basic"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoFpBase/ object  [[elisp:(org-cycle)][| ]]
+"""
+class BpoFpBase(object):
+####+END:
+    """
+** Links a base within a BPO to a ICM-FPs class
+"""
+####+BEGIN: bx:icm:py3:method :methodName "__init__" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /__init__/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def __init__(
+####+END:
+            self,
+            bpoId,
+            fileSysPath,
+    ):
+        self.bpoId = bpoId
+        self.fpsBaseDir = None
+        self.fpsBaseInst = None
+
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_absBasePath" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_absBasePath/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_absBasePath(
+####+END:
+           self,
+    ):
+        return typing.cast(str, self.fpsBaseDir)
+
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_absBasePathSet" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_absBasePathSet/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_absBasePathSet(
+####+END:
+            self,
+            fpsBaseDir,
+    ):
+        self.fpsBaseDir = fpsBaseDir
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_baseInstanceMake" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_baseInstanceMake/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_baseInstanceMake(
+####+END:
+            self,
+            BaseClassName,
+    ):
+        fpsPath = self.fps_absBasePath()
+        self.fpsBaseInst = pattern.sameInstance(
+            BaseClassName,
+            fpsPath,
+        )
+        return self.fpsBaseInst
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_baseInstanceGet" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_baseInstanceGet/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_baseInstanceGet(
+####+END:
+            self,
+    ):
+        return self.fpsBaseInst
+
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_baseMake" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_baseMake/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_baseMake(
+####+END:
+            self,
+    ):
+        icm.EH_problem_usageError("This should have been specified in the subClass")
+        return None
+
 
 ####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
 """
@@ -141,7 +235,7 @@ def examples_bpo_fpBases(
     # def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
 
     # oneBpo = "pmi_ByD-100001"
-    # thisClass = "AalsRepo_LiveParams"
+    # thisClass = "PalsRepo_LiveParams"
     oneBpo = bpoId
     thisClass = cls
 
@@ -154,8 +248,8 @@ def examples_bpo_fpBases(
     cps=cpsInit() ; cps['bpoId'] = oneBpo ; cps['cls'] = thisClass
     menuItem(verbosity='little')
 
-    cmndArgs = "basic" ; menuItem(verbosity='little')
-    cmndArgs = "setExamples getExamples" ; menuItem(verbosity='little')
+    # cmndArgs = "basic" ; menuItem(verbosity='little')
+    cmndArgs = "basic setExamples getExamples" ; menuItem(verbosity='little')
 
     cmndName = "bpoFpParamsSetDefaults" ; cmndArgs = "" ;
     cps=cpsInit() ; cps['bpoId'] = oneBpo ; cps['cls'] = thisClass
@@ -165,8 +259,8 @@ def examples_bpo_fpBases(
     cps=cpsInit() ; cps['bpoId'] = oneBpo ; cps['cls'] = thisClass
     menuItem(verbosity='little')
 
-    cmndArgs = "basic" ; menuItem(verbosity='little')
-    cmndArgs = "setExamples getExamples" ; menuItem(verbosity='little')
+    # cmndArgs = "basic" ; menuItem(verbosity='little')
+    cmndArgs = "basic setExamples getExamples" ; menuItem(verbosity='little')
 
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
@@ -214,10 +308,10 @@ class bpoFpParamsList(icm.Cmnd):
         if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
             return cmndOutcome
 ####+END:
-        thisBpo = aalsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
 
         # exec(
-        #     "aalsRepo_liveParams = __main__.{cls}('{bpoId}',)".format(cls=cls, bpoId=bpoId,),
+        #     "palsRepo_liveParams = __main__.{cls}('{bpoId}',)".format(cls=cls, bpoId=bpoId,),
         #     globals(),
         # )
 
@@ -310,7 +404,7 @@ class bpoFpParamsSet(icm.Cmnd):
         cls = callParamsDict['cls']
 
 ####+END:
-        thisBpo = aalsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
 
         bpoFpBaseInst = getattr(__main__, cls)(bpoId)
         fps_base = bpoFpBaseInst.fps_baseMake()
@@ -359,7 +453,7 @@ class bpoFpParamsSetDefaults(icm.Cmnd):
         cls = callParamsDict['cls']
 
 ####+END:
-        thisBpo = aalsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
 
         bpoFpBaseInst = getattr(__main__, cls)(bpoId)
         fps_base = bpoFpBaseInst.fps_baseMake()
@@ -379,6 +473,158 @@ class bpoFpParamsSetDefaults(icm.Cmnd):
         return """
 ***** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns the full path of the Sr baseDir.
 """
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "bpoFpParamSetWithNameValue" :parsMand "bpoId cls" :parsOpt "" :argsMin "2" :argsMax "2" :asFunc "" :interactiveP ""
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /bpoFpParamSetWithNameValue/ parsMand=bpoId cls parsOpt= argsMin=2 argsMax=2 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+"""
+class bpoFpParamSetWithNameValue(icm.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 2, 'Max': 2,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        bpoId=None,         # or Cmnd-Input
+        cls=None,         # or Cmnd-Input
+        argsList=[],         # or Args-Input
+    ):
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+        else:
+            effectiveArgsList = argsList
+
+        callParamsDict = {'bpoId': bpoId, 'cls': cls, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        bpoId = callParamsDict['bpoId']
+        cls = callParamsDict['cls']
+
+        cmndArgsSpecDict = self.cmndArgsSpec()
+        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+            return cmndOutcome
+####+END:
+        paramName = self.cmndArgsGet("0", cmndArgsSpecDict, effectiveArgsList)
+        paramValue = self.cmndArgsGet("1", cmndArgsSpecDict, effectiveArgsList)
+
+        print(f"{paramName} {paramValue}")
+
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+
+        bpoFpBaseInst = getattr(__main__, cls)(bpoId)
+
+        fpsBaseInst = bpoFpBaseInst.fps_baseMake()
+
+        fpsBaseInst.fps_setParam(paramName, paramValue)
+
+        return cmndOutcome
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0",
+            argName="paramName",
+            argDefault="OopsName",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="1",
+            argName="paramValue",
+            argDefault="OopsValue",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+
+        return cmndArgsSpecDict
+
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "bpoFpParamGetWithName" :parsMand "bpoId cls" :parsOpt "" :argsMin "1" :argsMax "1" :asFunc "" :interactiveP ""
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /bpoFpParamGetWithName/ parsMand=bpoId cls parsOpt= argsMin=1 argsMax=1 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+"""
+class bpoFpParamGetWithName(icm.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        bpoId=None,         # or Cmnd-Input
+        cls=None,         # or Cmnd-Input
+        argsList=[],         # or Args-Input
+    ):
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+        else:
+            effectiveArgsList = argsList
+
+        callParamsDict = {'bpoId': bpoId, 'cls': cls, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        bpoId = callParamsDict['bpoId']
+        cls = callParamsDict['cls']
+
+        cmndArgsSpecDict = self.cmndArgsSpec()
+        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+            return cmndOutcome
+####+END:
+        paramName = self.cmndArgsGet("0", cmndArgsSpecDict, effectiveArgsList)
+
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+
+        bpoFpBaseInst = getattr(__main__, cls)(bpoId)
+
+        fpsBaseInst = bpoFpBaseInst.fps_baseMake()
+
+        paramValue = fpsBaseInst.fps_getParam(paramName,)
+
+        print(f"{paramValue.parValueGet()}")
+
+        return cmndOutcome
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0",
+            argName="paramName",
+            argDefault="OopsName",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+
+        return cmndArgsSpecDict
+
 
 
 ####+BEGINNOT: bx:icm:python:cmnd:classHead :cmndName "bpoFpParamsRead" :parsMand "bpoId cls" :parsOpt "" :argsMin "0" :argsMax "999" :asFunc "" :interactiveP ""
@@ -415,7 +661,7 @@ class bpoFpParamsRead(icm.Cmnd):
         if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
             return cmndOutcome
 ####+END:
-        thisBpo = aalsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
 
         bpoFpBaseInst = getattr(__main__, cls)(bpoId)
         fpBaseDir = bpoFpBaseInst.fps_absBasePath()
@@ -461,7 +707,7 @@ class bpoFpParamsRead(icm.Cmnd):
         cmndArgsSpecDict = icm.CmndArgsSpecDict()
         argChoices = ['all', 'obj']
 
-        thisBpo = aalsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
+        thisBpo = palsBpo.obtainBpo(bpoId,) ; icm.unusedSuppress(thisBpo)
 
         bpoFpBaseInst = getattr(__main__, cls)(bpoId)
         fps_base = bpoFpBaseInst.fps_baseMake() # type: ignore

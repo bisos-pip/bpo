@@ -111,6 +111,7 @@ G = icm.IcmGlobalContext()
 # from bisos.platform import bxPlatformConfig
 # from bisos.platform import bxPlatformThis
 
+from bisos.basics import pattern
 
 ####+BEGIN: bx:dblock:python:section :title "Start Your Sections Here"
 """
@@ -140,7 +141,7 @@ class bpoId_Type(enum.Enum):
 class bpo_Type(enum.Enum):
 ####+END:
     project = 'project'
-    aais = 'aais'
+    pals = 'pals'
 
 ####+BEGIN: bx:dblock:python:enum :enumName "bpo_Purpose" :comment ""
 """
@@ -230,7 +231,8 @@ class EffectiveBpos(object):
         if bpoId in __class__.effectiveBposList:
             return __class__.effectiveBposList[bpoId]
         else:
-            return BpoClass(bpoId)
+            # return BpoClass(bpoId)
+            return pattern.sameInstance(BpoClass, bpoId)  # In the __init__ of BpoClass there should be a addBpo
 
     @staticmethod
     def givenBpoIdGetBpo(
@@ -241,7 +243,7 @@ class EffectiveBpos(object):
         if bpoId in __class__.effectiveBposList:
             return __class__.effectiveBposList[bpoId]
         else:
-            icm.EH_problem_usageError("")
+            # icm.EH_problem_usageError("")
             return None
 
     @staticmethod
@@ -290,6 +292,7 @@ class Bpo(object):
 
         self.bpoId = bpoId
         self.bpoName = bpoId
+        self.bpoBaseDir = bpoBaseDir_obtain(bpoId)
 
         self.repo_rbxe = BpoRepo_Rbxe(bpoId)
         self.repo_bxeTree = BpoRepo_BxeTree(bpoId)
@@ -356,7 +359,7 @@ class BpoRepo(object):
     ):
         self.bpo = EffectiveBpos.givenBpoIdGetBpo(bpoId)
         if not self.bpo:
-            icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
+            # icm.EH_critical_usageError(f"Missing BPO for {bpoId}")
             return
 
 
@@ -470,13 +473,13 @@ def examples_bpo_basicAccess(
     cmndArgs = ""
     cps = cpsInit() ; cps['bpoId'] = oneBpo
     menuItem(verbosity='none')
-    menuItem(verbosity='full')
+    # menuItem(verbosity='full')
 
     cmndName = "bpoBaseDirObtain"
     cmndArgs = ""
     cps = cpsInit() ; cps['bpoId'] = oneBpo
     menuItem(verbosity='none')
-    menuItem(verbosity='full')
+    # menuItem(verbosity='full')
 
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
