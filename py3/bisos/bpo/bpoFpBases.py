@@ -112,7 +112,7 @@ from bisos.icm import fp
 #from bisos.bpo import bpo
 from bisos.pals import palsBpo
 
-####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
+####+BEGIN: bx:icm:py3:section :title "Common Parameters Specification"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
@@ -210,7 +210,7 @@ class BpoFpBase(object):
         return None
 
 
-####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
+####+BEGIN: bx:icm:py3:section :title "Common Examples Sections"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
@@ -263,7 +263,7 @@ def examples_bpo_fpBases(
     cmndArgs = "basic setExamples getExamples" ; menuItem(verbosity='little')
 
 
-####+BEGIN: bx:dblock:python:section :title "ICM Commands"
+####+BEGIN: bx:icm:py3:section :title "ICM Commands"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *ICM Commands*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
@@ -737,7 +737,7 @@ class bpoFpParamsRead(icm.Cmnd):
 
 
 
-####+BEGIN: bx:icm:python:section :title "End Of Editable Text"
+####+BEGIN: bx:icm:py3:section :title "End Of Editable Text"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *End Of Editable Text*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
