@@ -5,7 +5,7 @@
 
 import typing
 
-from unisos.icm.icm import EH_problem_usageError, ReturnCode
+# from unisos.icm.icm import EH_problem_usageError, ReturnCode   # NOTYET, where did this come from?
 
 icmInfo: typing.Dict[str, typing.Any] = { 'moduleDescription': ["""
 *       [[elisp:(org-show-subtree)][|=]]  [[elisp:(org-cycle)][| *Description:* | ]]
@@ -209,7 +209,7 @@ def bpoBaseDir_obtain(
 """
 class EffectiveBpos(object):
 ####+END:
-    """y
+    """
 ** Only one instance is created for a given BpoId.
 """
     effectiveBposList = {}
@@ -433,6 +433,17 @@ def commonParamsSpecify(
         argparseShortOpt=None,
         argparseLongOpt='--bpoId',
     )
+    icmParams.parDictAdd(
+        parName='envRelPath',
+        parDescription="Environment Relative Path",
+        parDataType=None,
+        parDefault=None,
+        parChoices=["any"],
+        # parScope=icm.ICM_ParamScope.TargetParam,
+        argparseShortOpt=None,
+        argparseLongOpt='--envRelPath',
+    )
+
 
 
 ####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
