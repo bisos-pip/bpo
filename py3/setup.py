@@ -31,8 +31,11 @@ requires = [
 # print('Requirements: %s' % ','.join(requires))
 
 scripts = [
+<<<<<<< HEAD
     "./bin/bpoManage.cs",
     # "./bin/bpoAaisManage.py",
+=======
+>>>>>>> ac52c0f722733bf3a9999911ba4c66855cf32658
 ]
 
 
