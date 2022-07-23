@@ -131,11 +131,60 @@ class BpoRunBases(object):
             self,
     ):
         self.varBasePath_update()
-        self.controlBasePath_update()
+        self.controlBasePath_update()  # MB-2022 no longer in var
         self.logBasePath_update()
         self.curBasePath_update()
         self.tmpBasePath_update()
         return
+
+####+BEGIN: bx:icm:py3:method :methodName "namedBasePath_obtain" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /namedBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def namedBasePath_obtain(
+####+END:
+            self,
+            named,
+    ) -> pathlib.Path:
+        """ #+begin_org
+*** [[elisp:(org-cycle)][| *MethodDesc:* | ]]  Confirm that bpoBaseDir+envRelPath exists, then append var.
+        #+end_org """
+        return (
+            pathlib.Path(
+                os.path.join(
+                    self.bpo.bpoBaseDir,
+                    named,
+                )
+            )
+        )
+
+
+####+BEGIN: bx:icm:py3:method :methodName "namedVarBasePath_update" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /namedVarBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def namedVarBasePath_update(
+####+END:
+            self,
+            named,
+    ) -> pathlib.Path:
+
+        actualBasePath = pathlib.Path(
+            os.path.join(
+                "/var/bisos/bpo",
+                named,
+                self.bpoId,
+                "bpo",
+            )
+        )
+        actualBasePath.mkdir(parents=True, exist_ok=True)
+        bpoBasePath  = self.namedBasePath_obtain(named)
+
+        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
+
+
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "varBasePath_update" :deco "default"
@@ -147,19 +196,7 @@ class BpoRunBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/var",
-                self.bpoId,
-                "bpo",
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.varBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
+        return self.namedVarBasePath_update('var')
 
 ####+BEGIN: bx:icm:py3:method :methodName "varBasePath_obtain" :deco "default"
     """
@@ -170,54 +207,7 @@ class BpoRunBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir, "var"
-                )
-            )
-        )
-
-
-####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_update" :deco "default"
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def controlBasePath_update(
-####+END:
-            self,
-    ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/control",
-                self.bpoId,
-                "bpo",
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.controlBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
-
-####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_obtain" :deco "default"
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def controlBasePath_obtain(
-####+END:
-            self,
-    ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir, "control"
-                )
-            )
-        )
+        return self.namedBasePath_obtain('var')
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "logBasePath_update" :deco "default"
@@ -229,18 +219,7 @@ class BpoRunBases(object):
 ####+END:
            self,
     ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/log",
-                self.bpoId,
-                "bpo",
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.logBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
+        return self.namedVarBasePath_update('log')
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "logBasePath_obtain" :deco "default"
@@ -252,13 +231,7 @@ class BpoRunBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir, "log"
-                )
-            )
-        )
+        return self.namedBasePath_obtain('log')
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "tmpBasePath_update" :deco "default"
@@ -298,46 +271,58 @@ class BpoRunBases(object):
             )
         )
 
-
-####+BEGIN: bx:icm:py3:method :methodName "curBasePath_update" :deco "default"
+####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_obtain" :deco "default"
     """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /curBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
     @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def curBasePath_update(
-####+END:
-          self,
-    ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/cur",
-                self.bpoId,
-                "bpo",
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.curBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
-####+BEGIN: bx:icm:py3:method :methodName "curBasePath_obtain" :deco "default"
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /curBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def curBasePath_obtain(
+    def controlBasePath_obtain(
 ####+END:
             self,
     ) -> pathlib.Path:
         return (
             pathlib.Path(
                 os.path.join(
-                    self.bpo.bpoBaseDir, "cur"
+                    self.bpo.bpoBaseDir, "control"
                 )
             )
         )
 
+####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_update" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def controlBasePath_update(
+####+END:
+          self,
+    ) -> pathlib.Path:
+        actualBasePath = self.controlBasePath_obtain()
+        actualBasePath.mkdir(parents=True, exist_ok=True)
+        return actualBasePath
+
+
+####+BEGIN: bx:icm:py3:method :methodName "dataBasePath_update" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /dataBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def dataBasePath_update(
+####+END:
+          self,
+    ) -> pathlib.Path:
+        return self.namedVarBasePath_update('data')
+
+####+BEGIN: bx:icm:py3:method :methodName "dataBasePath_obtain" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /dataBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def dataBasePath_obtain(
+####+END:
+            self,
+    ) -> pathlib.Path:
+        return self.namedBasePath_obtain('data')
 
 ####+BEGIN: bx:dblock:python:class :className "BpoRunEnvBases" :superClass "object" :comment "Run Bases For An Env Of A Bpo" :classType "basic"
 """ #+begin_org
@@ -373,11 +358,63 @@ class BpoRunEnvBases(object):
             self,
     ):
         self.varBasePath_update()
-        self.controlBasePath_update()
+        self.controlBasePath_update()   # MB-2022 no longer in var
         self.logBasePath_update()
         self.curBasePath_update()
         self.tmpBasePath_update()
         return
+
+####+BEGIN: bx:icm:py3:method :methodName "namedBasePath_obtain" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /namedBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def namedBasePath_obtain(
+####+END:
+            self,
+            named,
+    ) -> pathlib.Path:
+        """ #+begin_org
+*** [[elisp:(org-cycle)][| *MethodDesc:* | ]]  Confirm that bpoBaseDir+envRelPath exists, then append var.
+        #+end_org """
+
+        bpoEnvRelBase = pathlib.Path(
+            os.path.join(
+                self.bpo.bpoBaseDir,
+                self.envRelPath,
+            )
+        )
+        bpoEnvRelBase.mkdir(parents=True, exist_ok=True)
+        return (
+            pathlib.Path(
+                pathlib.PurePath(bpoEnvRelBase, named)
+            )
+        )
+
+
+####+BEGIN: bx:icm:py3:method :methodName "namedVarBasePath_update" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /namedVarBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def namedVarBasePath_update(
+####+END:
+            self,
+            named,
+    ) -> pathlib.Path:
+
+        actualBasePath = pathlib.Path(
+            os.path.join(
+                "/var/bisos/bpo",
+                named,
+                self.bpoId,
+                self.envRelPath,
+            )
+        )
+        actualBasePath.mkdir(parents=True, exist_ok=True)
+        bpoBasePath  = self.namedBasePath_obtain(named)
+
+        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "varBasePath_update" :deco "default"
@@ -389,18 +426,7 @@ class BpoRunEnvBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/var",
-                self.bpoId,
-                self.envRelPath,
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.varBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
+        return self.namedVarBasePath_update('var')
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "varBasePath_obtain" :deco "default"
@@ -412,59 +438,10 @@ class BpoRunEnvBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir,
-                    self.envRelPath,
-                ),
-                "var",
-            )
-        )
-
-
-####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_update" :deco "default"
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def controlBasePath_update(
-####+END:
-            self,
-    ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/control",
-                self.bpoId,
-                self.envRelPath,
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.controlBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
-
-####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_obtain" :deco "default"
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def controlBasePath_obtain(
-####+END:
-            self,
-    ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir,
-                    self.envRelPath,
-                ),
-
-                "control",
-            )
-        )
+        """ #+begin_org
+*** [[elisp:(org-cycle)][| *MethodDesc:* | ]]  Confirm that bpoBaseDir+envRelPath exists, then append var.
+        #+end_org """
+        return self.namedBasePath_obtain('var')
 
 
 ####+BEGIN: bx:icm:py3:method :methodName "logBasePath_update" :deco "default"
@@ -476,19 +453,7 @@ class BpoRunEnvBases(object):
 ####+END:
            self,
     ) -> pathlib.Path:
-
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/log",
-                self.bpoId,
-                self.envRelPath,
-            )
-        )
-        actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.logBasePath_obtain()
-
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
+        return self.namedVarBasePath_update('log')
 
 ####+BEGIN: bx:icm:py3:method :methodName "logBasePath_obtain" :deco "default"
     """
@@ -499,16 +464,7 @@ class BpoRunEnvBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir,
-                    self.envRelPath,
-                ),
-                "log"
-            )
-        )
-
+        return self.namedBasePath_obtain('log')
 
 ####+BEGIN: bx:icm:py3:method :methodName "tmpBasePath_update" :deco "default"
     """
@@ -539,58 +495,57 @@ class BpoRunEnvBases(object):
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir,
-                    self.envRelPath,
-                ),
-                "tmp",
-            )
-        )
+        return self.namedBasePath_obtain('tmp')
 
-
-####+BEGIN: bx:icm:py3:method :methodName "curBasePath_update" :deco "default"
+####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_update" :deco "default"
     """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /curBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
     @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def curBasePath_update(
+    def controlBasePath_update(
 ####+END:
           self,
     ) -> pathlib.Path:
 
-        actualBasePath = pathlib.Path(
-            os.path.join(
-                "/var/bisos/bpo/cur",
-                self.bpoId,
-                self.envRelPath,
-            )
-        )
+        actualBasePath = self.controlBasePath_obtain()
         actualBasePath.mkdir(parents=True, exist_ok=True)
-        bpoBasePath  = self.curBasePath_obtain()
+        return actualBasePath
 
-        return fpath.symlinkUpdate(actualBasePath, bpoBasePath)
-
-####+BEGIN: bx:icm:py3:method :methodName "curBasePath_obtain" :deco "default"
+####+BEGIN: bx:icm:py3:method :methodName "controlBasePath_obtain" :deco "default"
     """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /curBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /controlBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
     @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def curBasePath_obtain(
+    def controlBasePath_obtain(
 ####+END:
             self,
     ) -> pathlib.Path:
-        return (
-            pathlib.Path(
-                os.path.join(
-                    self.bpo.bpoBaseDir,
-                    self.envRelPath,
-                ),
-                "cur",
-            )
-        )
+        return self.namedBasePath_obtain('control')
 
+
+
+####+BEGIN: bx:icm:py3:method :methodName "dataBasePath_update" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /dataBasePath_update/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def dataBasePath_update(
+####+END:
+          self,
+    ) -> pathlib.Path:
+        return self.namedVarBasePath_update('data')
+
+
+####+BEGIN: bx:icm:py3:method :methodName "dataBasePath_obtain" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /dataBasePath_obtain/ deco=default  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def dataBasePath_obtain(
+####+END:
+            self,
+    ) -> pathlib.Path:
+        return self.namedBasePath_obtain('data')
 
 
 ####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
@@ -600,12 +555,14 @@ class BpoRunEnvBases(object):
 ####+END:
 
 
-####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_runBases" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList "oneBpo"
+####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_runBases" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList "oneBpo oneEnvRelPath sectionTitle=None"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-examples [[elisp:(outline-show-subtree+toggle)][||]] /examples_bpo_runBases/ =Show/Verify/Update For relevant PBDs= retType=none argsList=(oneBpo)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-examples [[elisp:(outline-show-subtree+toggle)][||]] /examples_bpo_runBases/ =Show/Verify/Update For relevant PBDs= retType=none argsList=(oneBpo oneEnvRelPath sectionTitle=None)  [[elisp:(org-cycle)][| ]]
 #+end_org """
 def examples_bpo_runBases(
     oneBpo,
+    oneEnvRelPath,
+    sectionTitle=None,
 ):
 ####+END:
     """
@@ -615,30 +572,22 @@ def examples_bpo_runBases(
     def menuItem(verbosity): icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity=verbosity) # 'little' or 'none'
     # def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
 
-    #oneBpo = "pmi_ByD-100001"
+    if sectionTitle:
+        icm.cmndExampleMenuChapter('*Run Environment Bases Update Commands*')
 
-    # def moduleOverviewMenuItem(overviewCmndName):
-    #     icm.cmndExampleMenuChapter('* =Module=  Overview (desc, usage, status)')
-    #     cmndName = "overview_bxpBaseDir" ; cmndArgs = "moduleDescription moduleUsage moduleStatus" ;
-    #     cps = collections.OrderedDict()
-    #     icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='none') # 'little' or 'none'
-
-    # moduleOverviewMenuItem(bpo_libOverview)
-
-    icm.cmndExampleMenuChapter('*Run Environment Bases Update Commands*')
-
-    cmndName = "bpoRunBasesUpdate"
-    cmndArgs = ""
-    cps = cpsInit() ; cps['bpoId'] = oneBpo
-    menuItem(verbosity='none')
-    # menuItem(verbosity='full')
-
-    cmndName = "bpoRunEnvBasesUpdate"
-    cmndArgs = ""
-    cps = cpsInit() ; cps['bpoId'] = oneBpo
-    cps['envRelPath'] = "marmee/gmail/inMail/mohsen.byname"
-    menuItem(verbosity='none')
-    # menuItem(verbosity='full')
+    if oneEnvRelPath == None:
+        cmndName = "bpoRunBasesUpdate"
+        cmndArgs = ""
+        cps = cpsInit() ; cps['bpoId'] = oneBpo
+        menuItem(verbosity='none')
+        # menuItem(verbosity='full')
+    else:
+        cmndName = "bpoRunEnvBasesUpdate"
+        cmndArgs = ""
+        cps = cpsInit() ; cps['bpoId'] = oneBpo
+        cps['envRelPath'] = oneEnvRelPath
+        menuItem(verbosity='none')
+        # menuItem(verbosity='full')
 
 
 
@@ -693,13 +642,13 @@ class bpoRunBasesUpdate(icm.Cmnd):
                 argChoices.pop(0)
                 cmndArgs= argChoices
 
-        thisBpo = palsBpo.obtainBpo(bpoId,)
+        thisBpo = BpoRunBases(bpoId,)
 
         for each in cmndArgs:
             try:
-                baseUpdateMethod = getattr(thisBpo.bases, "{each}BasePath_update".format(each=each))
-                palsBpoBase = baseUpdateMethod()
-                print(palsBpoBase)
+                baseUpdateMethod = getattr(thisBpo, "{each}BasePath_update".format(each=each))
+                runBpoBase = baseUpdateMethod()
+                print(runBpoBase)
             except AttributeError:
                 icm.EH_critical_exception("")
                 continue
@@ -723,7 +672,7 @@ class bpoRunBasesUpdate(icm.Cmnd):
             argPosition="0&5",
             argName="cmndArgs",
             argDefault='all',
-            argChoices=['all', 'var', 'tmp', 'log', 'control', 'cur'],
+            argChoices=['all', 'var', 'tmp', 'log', 'control', 'data'],
             argDescription="Rest of args for use by action"
         )
 
@@ -782,8 +731,8 @@ class bpoRunEnvBasesUpdate(icm.Cmnd):
         for each in cmndArgs:
             try:
                 baseUpdateMethod = getattr(bpoRunEnvBases, f"{each}BasePath_update")
-                palsBpoBase = baseUpdateMethod()
-                print(palsBpoBase)
+                runEnvBpoBase = baseUpdateMethod()
+                print(runEnvBpoBase)
             except AttributeError:
                 icm.EH_critical_exception("")
                 continue
@@ -807,7 +756,7 @@ class bpoRunEnvBasesUpdate(icm.Cmnd):
             argPosition="0&5",
             argName="cmndArgs",
             argDefault='all',
-            argChoices=['all', 'var', 'tmp', 'log', 'control', 'cur'],
+            argChoices=['all', 'var', 'tmp', 'log', 'control', 'data'],
             argDescription="Rest of args for use by action"
         )
 

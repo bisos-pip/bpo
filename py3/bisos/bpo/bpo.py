@@ -5,11 +5,8 @@
 
 import typing
 
-<<<<<<< HEAD
 # from unisos.icm.icm import EH_problem_usageError, ReturnCode   # NOTYET, where did this come from?
 
-=======
->>>>>>> ac52c0f722733bf3a9999911ba4c66855cf32658
 icmInfo: typing.Dict[str, typing.Any] = { 'moduleDescription': ["""
 *       [[elisp:(org-show-subtree)][|=]]  [[elisp:(org-cycle)][| *Description:* | ]]
 **  [[elisp:(org-cycle)][| ]]  [Xref]          :: *[Related/Xrefs:]*  <<Xref-Here->>  -- External Documents  [[elisp:(org-cycle)][| ]]
