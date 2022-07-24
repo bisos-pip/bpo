@@ -94,7 +94,6 @@ import pathlib
 # from bisos.basics import pattern
 
 from bisos.bpo import bpo
-from bisos.pals import palsBpo
 #from bisos.pals import palsSis
 from bisos.icm import fpath
 
@@ -133,7 +132,7 @@ class BpoRunBases(object):
         self.varBasePath_update()
         self.controlBasePath_update()  # MB-2022 no longer in var
         self.logBasePath_update()
-        self.curBasePath_update()
+        self.dataBasePath_update()
         self.tmpBasePath_update()
         return
 
@@ -360,7 +359,7 @@ class BpoRunEnvBases(object):
         self.varBasePath_update()
         self.controlBasePath_update()   # MB-2022 no longer in var
         self.logBasePath_update()
-        self.curBasePath_update()
+        self.dataBasePath_update()
         self.tmpBasePath_update()
         return
 
@@ -548,10 +547,10 @@ class BpoRunEnvBases(object):
         return self.namedBasePath_obtain('data')
 
 
-####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
-"""
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
-"""
+####+BEGIN: bx:icm:py3:section :title "CS-Lib Examples"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *CS-Lib Examples*  [[elisp:(org-cycle)][| ]]
+#+end_org """
 ####+END:
 
 
@@ -562,7 +561,7 @@ class BpoRunEnvBases(object):
 def examples_bpo_runBases(
     oneBpo,
     oneEnvRelPath,
-    sectionTitle=None,
+    sectionTitle: typing.AnyStr = "",
 ):
 ####+END:
     """
@@ -572,8 +571,11 @@ def examples_bpo_runBases(
     def menuItem(verbosity): icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity=verbosity) # 'little' or 'none'
     # def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
 
-    if sectionTitle:
+    if sectionTitle == "default":
         icm.cmndExampleMenuChapter('*Run Environment Bases Update Commands*')
+
+    if not oneBpo:
+        return
 
     if oneEnvRelPath == None:
         cmndName = "bpoRunBasesUpdate"
