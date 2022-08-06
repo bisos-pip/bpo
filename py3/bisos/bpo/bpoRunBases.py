@@ -346,6 +346,13 @@ class BpoRunEnvBases(object):
         self.bpoId = bpoId
         self.bpo = bpo.EffectiveBpos.givenBpoIdObtainBpo(bpoId, bpo.Bpo)
         self.envRelPath = envRelPath
+        self.bpoEnvBase = pathlib.Path(
+            os.path.join(
+                self.bpo.bpoBaseDir,
+                self.envRelPath,
+            )
+        )
+
 
 ####+BEGIN: bx:icm:py3:method :methodName "basesUpdate" :deco "default"
     """

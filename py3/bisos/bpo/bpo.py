@@ -364,7 +364,7 @@ class BpoRepo(object):
 
 
 
-####+BEGIN: bx:dblock:python:class :className "BpoRepo_Rbxe" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+####+BEGIN: bx:dblock:python:class :className "BpoRepo_Rbxe" :superClass "BpoRepo" :comment "A BPO Repository -- to be subclassed" :classType "basic"
 """
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoRepo_Rbxe/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
 """
@@ -386,10 +386,10 @@ class BpoRepo_Rbxe(BpoRepo):
         print(f"rbxeInfo bpoId={self.bpo.bpoId}") # type: ignore
 
 
-####+BEGIN: bx:dblock:python:class :className "BpoRepo_BxeTree" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Class-basic :: /BpoRepo_BxeTree/ object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
-"""
+####+BEGIN: bx:dblock:python:class :className "BpoRepo_BxeTree" :superClass "BpoRepo" :comment "A BPO Repository -- to be subclassed" :classType "basic"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoRepo_BxeTree/ BpoRepo =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
+#+end_org """
 class BpoRepo_BxeTree(BpoRepo):
 ####+END:
     """
@@ -408,10 +408,10 @@ class BpoRepo_BxeTree(BpoRepo):
         print("bxeTreeInfo")
 
 
-####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
-"""
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
-"""
+####+BEGIN: bx:icm:py3:section :title "Common Parameters Specification"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]
+#+end_org """
 ####+END:
 
 
@@ -446,12 +446,11 @@ def commonParamsSpecify(
 
 
 
-####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
-"""
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
-"""
+####+BEGIN: bx:icm:py3:section :title "CS-Lib Examples"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *CS-Lib Examples*  [[elisp:(org-cycle)][| ]]
+#+end_org """
 ####+END:
-
 
 ####+BEGIN: bx:dblock:python:func :funcName "examples_bpo_basicAccess" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList "oneBpo"
 """
