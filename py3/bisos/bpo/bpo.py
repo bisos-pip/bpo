@@ -90,9 +90,9 @@ import enum
 
 from bisos.basics import pattern
 
-####+BEGIN: bx:dblock:python:section :title "Start Your Sections Here"
+####+BEGIN: bx:dblock:python:section :title "Enumerations"
 """
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Start Your Sections Here*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
+*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Enumerations*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
 
@@ -176,6 +176,27 @@ def bpoBaseDir_obtain(
     return bpoBaseDir
 
 
+####+BEGIN: b:py3:cs:func/typing :funcName "idEffective" :funcType "extTyped" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-extTyped [[elisp:(outline-show-subtree+toggle)][||]] /idEffective/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def idEffective(
+####+END:
+        bpoId: str,
+) -> str:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+    #+end_org """
+
+    effectiveId = ""
+    if bpoId == "cur":
+        b_io.eh.problem_usageError("NOTYET")
+    else:
+        effectiveId = bpoId
+    return effectiveId
+
+
 ####+BEGIN: bx:dblock:python:subSection :title "Class Definitions"
 
 ####+END:
@@ -232,6 +253,61 @@ class EffectiveBpos(object):
             return __class__.effectiveBposList[bpoId]
         else:
             return None
+
+####+BEGIN: b:py3:cs:func/typing :funcName "givenPathObtainBpoId" :funcType "extTyped" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-extTyped [[elisp:(outline-show-subtree+toggle)][||]] /givenPathObtainBpoId/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def givenPathObtainBpoId(
+####+END:
+        inPath: str,
+) -> str:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+    #+end_org """
+
+    bpoId = ""
+
+    subjectPath = os.path.realpath(inPath)
+    pathComps = subjectPath.split('/')
+    if pathComps[1] == "bxo" and pathComps[2] == "r3" and pathComps[3] == "iso":
+        bpoId = pathComps[4]
+    return bpoId
+
+####+BEGIN: b:py3:cs:func/typing :funcName "givenPathObtainRelPath" :funcType "extTyped" :deco "track"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-extTyped [[elisp:(outline-show-subtree+toggle)][||]] /givenPathObtainRelPath/  deco=track  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def givenPathObtainRelPath(
+####+END:
+        inPath: str,
+) -> str:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+    #+end_org """
+
+    retVal = ""
+
+    subjectPath = os.path.realpath(inPath)
+    pathComps = subjectPath.split('/')
+    if pathComps[1] == "bxo" and pathComps[2] == "r3" and pathComps[3] == "iso":
+        bpoId = pathComps[4]
+    else:
+        b_io.eh.problem_usageError("")
+        return retVal
+
+    pathComps.pop(0)  # /
+    pathComps.pop(0)
+    pathComps.pop(0)
+    pathComps.pop(0)
+    pathComps.pop(0)
+
+    retVal = '/'.join(pathComps)
+
+    return retVal
+
 
 
 ####+BEGIN: bx:cs:python:func :funcName "obtainBpo" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "bpoId"
@@ -391,7 +467,6 @@ class BpoRepo_BxeTree(BpoRepo):
 #+end_org """
 ####+END:
 
-
 ####+BEGIN: bx:dblock:python:func :funcName "commonParamsSpecify" :funcType "ParSpec" :retType "" :deco "" :argsList "csParams"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-ParSpec  [[elisp:(outline-show-subtree+toggle)][||]] /commonParamsSpecify/ retType= argsList=(csParams)  [[elisp:(org-cycle)][| ]]
@@ -468,6 +543,13 @@ def examples_bpo_basicAccess(
     menuItem(verbosity='none')
     # menuItem(verbosity='full')
 
+    cmndName = "forPathObtainBpoId"
+    cmndArgs = "~/bpos/usageEnvs/fullUse/aas/"
+    cps = cpsInit()
+    menuItem(verbosity='none')
+
+
+
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
 """
@@ -535,6 +617,37 @@ class bpoBaseDirObtain(cs.Cmnd):
             opError=b.op.notAsFailure(retVal),
             opResults=retVal,
         )
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "forPathObtainBpoId" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<forPathObtainBpoId>>  =verify= argsMin=1 argsMax=1 ro=cli   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class forPathObtainBpoId(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
+
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return b_io.eh.badOutcome(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        retVal = givenPathObtainBpoId(argsList[0])
+
+        print(retVal)
+
+        return cmndOutcome.set(
+            opError=b.op.notAsFailure(retVal),
+            opResults=retVal,
+        )
+
 
 ####+BEGIN: b:py3:cs:framework/endOfFile :basedOn "classification"
 """ #+begin_org

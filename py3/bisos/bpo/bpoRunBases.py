@@ -104,7 +104,7 @@ import pathlib
 
 from bisos.bpo import bpo
 #from bisos.pals import palsSis
-from bisos.icm import fpath
+from bisos.b import fpath  # not bisos.icm
 
 
 ####+BEGIN: b:py3:class/decl :className "BpoRunBases" :superClass "object" :comment "Run Bases of a Bpo" :classType "basic"

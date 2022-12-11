@@ -91,7 +91,6 @@ from bisos.bpo import bpoRunBases
 
 from bisos.currents import currentsConfig
 
-
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CsFrmWrk   [[elisp:(outline-show-subtree+toggle)][||]] ~csuList emacs-list Specifications~  [[elisp:(blee:org:code-block/above-run)][ /Eval Below/ ]] [[elisp:(org-cycle)][| ]]
 #+BEGIN_SRC emacs-lisp
@@ -187,23 +186,9 @@ class examples(cs.Cmnd):
         cs.examples.menuChapter('*Currents Examples Settings*')
         cur_examples()
 
-        cs.examples.menuChapter('*General Dev and Testing CMNDs*')
+        bpo.examples_bpo_basicAccess(cur_bpoId)
 
-        # oneBpo = "pmi_ByD-100001"
-        oneBpo = "pmi_ByN-100001"
-        cmndName = "argsAndParamsProc"
-
-        cmndArgs = "list argOne twoArg arg3" ;  cps = cpsInit();
-        menuItem()
-        cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='full')
-
-        cs.examples.menuChapter('*Other Than ICM Execution Line Examples*')
-
-        execLineEx("""ls -l""")
-
-        bpo.examples_bpo_basicAccess(oneBpo)
-
-        bpoRunBases.examples_bpo_runBases(oneBpo, "oneRelPath_fromCurs")
+        bpoRunBases.examples_bpo_runBases(cur_bpoId, "oneRelPath_fromCurs")
 
         return(cmndOutcome)
 
