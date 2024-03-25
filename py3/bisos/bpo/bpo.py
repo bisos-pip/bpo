@@ -396,71 +396,6 @@ class BpoBases(object):
         return os.path.join(self.bpo.baseDir, "tmp") # type: ignore
 
 
-####+BEGIN: b:py3:class/decl :className "BpoRepo" :superClass "object" :comment "A BPO Repository -- to be subclassed" :classType "basic"
-""" #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoRepo/  superClass=object =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
-#+end_org """
-class BpoRepo(object):
-####+END:
-    """
-** Abstraction of the base ByStar Portable Object
-"""
-
-    def __init__(
-            self,
-            bpoId,
-    ):
-        self.bpo = EffectiveBpos.givenBpoIdGetBpo(bpoId)
-        if not self.bpo:
-            # b_io.eh.critical_usageError(f"Missing BPO for {bpoId}")
-            return
-
-
-
-####+BEGIN: b:py3:class/decl :className "BpoRepo_Rbxe" :superClass "BpoRepo" :comment "A BPO Repository -- to be subclassed" :classType "basic"
-""" #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoRepo_Rbxe/  superClass=BpoRepo =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
-#+end_org """
-class BpoRepo_Rbxe(BpoRepo):
-####+END:
-    """
-** Abstraction of the base ByStar Portable Object
-"""
-    def __init__(
-            self,
-            bpoId,
-    ):
-        super().__init__(bpoId)
-        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
-            b_io.eh.critical_usageError(f"Missing BPO for {bpoId}")
-            return
-
-    def info(self,):
-        print(f"rbxeInfo bpoId={self.bpo.bpoId}") # type: ignore
-
-
-####+BEGIN: b:py3:class/decl :className "BpoRepo_BxeTree" :superClass "BpoRepo" :comment "A BPO Repository -- to be subclassed" :classType "basic"
-""" #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoRepo_BxeTree/  superClass=BpoRepo =A BPO Repository -- to be subclassed=  [[elisp:(org-cycle)][| ]]
-#+end_org """
-class BpoRepo_BxeTree(BpoRepo):
-####+END:
-    """
-** Abstraction of the base ByStar Portable Object
-"""
-    def __init__(
-            self,
-            bpoId,
-    ):
-        super().__init__(bpoId)
-        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
-            b_io.eh.critical_usageError(f"Missing BPO for {bpoId}")
-            return
-
-    def info(self,):
-        print("bxeTreeInfo")
-
-
 ####+BEGIN: bx:cs:py3:section :title "Common Parameters Specification"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]
@@ -495,7 +430,6 @@ def commonParamsSpecify(
         argparseShortOpt=None,
         argparseLongOpt='--envRelPath',
     )
-
 
 
 ####+BEGIN: bx:cs:py3:section :title "CS-Lib Examples"
