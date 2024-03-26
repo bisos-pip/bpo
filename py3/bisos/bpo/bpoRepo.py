@@ -81,6 +81,7 @@ Module description comes here.
 from bisos import b
 from bisos.b import cs
 from bisos.b import b_io
+from bisos.common import csParam
 
 import collections
 ####+END:
@@ -91,6 +92,9 @@ import os
 import enum
 
 from bisos.basics import pattern
+
+import pygit2
+
 
 ####+BEGIN: bx:dblock:python:section :title "Enumerations"
 """
@@ -117,15 +121,16 @@ class BpoRepo(object):
         self.bpoId = None
         self.bpoRepoName = None
         self.bpoRepoPath = None
+
         if bpoId == "__orRepoPath" or  bpoRepoName == "__orRepoPath":
             if bpoRepoPath == "__orBpoIdAnBpoRepoName":
-                b_io.eh.critical_usageError("Bad Usage")
+                b_io.eh.critical_usageError("Bad Usage -- Mssing bpoId or bpoRepoName")
                 # eh.exit()
             self.bpoRepoPath = bpoRepoPath
 
         if bpoRepoPath == "__orBpoIdAnBpoRepoName":
             if bpoId == "__orRepoPath" or  bpoRepoName == "__orRepoPath":
-                b_io.eh.critical_usageError("Bad Usage")
+                b_io.eh.critical_usageError("Bad Usage -- Mssing bpoId or bpoRepoName")
                 # eh.exit()
             self.bpoId = bpoId
             self.bpoRepoName = bpoRepoName
@@ -139,12 +144,35 @@ class BpoRepo(object):
             # NOTYET, based on path determine them
             # bpoReposManage.sh -h -v -n showRun -i bpoIdObtainForPath .
 
-        if self.bpoRepoPath is None:
-            self.bpoRepoPath = "NOTYET, self.bpoId+self.bpoRepoName"
+        self.bpo = bpo.obtainBpo(self.bpoId)
+        if not self.bpo:
+            b_io.eh.critical_usageError(f"Missing BPO for {self.bpoId}")
+            return
+
+        # if self.bpoRepoPath is None:
+        self.bpoRepoPath = os.path.join(self.bpo.baseDir, self.bpoRepoName)
+
+        try:
+            self.bpoRepo = pygit2.Repository(self.bpoRepoPath)
+        except Exception as e:
+            self.bpoRepo = None
+
+    @property
+    def cmndOutcome(self):
+        return b.op.Outcome()
 
     def repoCreateAndPush_withIcm(self,):
-        pass
-        # bpoReposManage.sh -h -v -n showRun -i repoCreateAndPushBasedOnPath
+        cmndOutcome = b.op.Outcome()
+        if self.bpoRepo is not None:
+            return(b_io.eh.badOutcome(cmndOutcome.set(opError=f"Already a Repo: {self.bpoRepoPath}")))
+
+        bpoRepoPath = self.bpoRepoPath
+
+        if (result := b.subProc.WOpW(invedBy=self, log=1,).bash(
+                f"""bpoReposManage.sh -h -v -n showRun -i repoCreateAndPushBasedOnPath {bpoRepoPath}""",
+        ).stdoutRstrip) == None: return(b_io.eh.badOutcome(cmndOutcome))
+
+        return cmndOutcome
 
     def repoCreateAndPush(self,):
         pass
@@ -155,8 +183,10 @@ class BpoRepo(object):
         # bpoReposManage.sh -h -v -n showRun -i repoCreateAndPushBasedOnPath
 
     def repoStatus(self,):
-        pass
-        # bpoReposManage.sh -h -v -n showRun -i repoCreateAndPushBasedOnPath
+        print(self.bpoRepo.path)
+        print(self.bpoRepo.workdir)
+        status = self.bpoRepo.status()
+        print(status)
 
     def repoClone(self,):
         pass
@@ -169,9 +199,6 @@ class BpoRepo(object):
     def repoPull(self,):
         pass
         # bpoReposManage.sh -h -v -n showRun -i repoCreateAndPushBasedOnPath
-
-
-
 
 
 ####+BEGIN: b:py3:class/decl :className "BpoRepo_Rbxe" :superClass "BpoRepo" :comment "A BPO Repository -- to be subclassed" :classType "basic"
@@ -187,8 +214,8 @@ class BpoRepo_Rbxe(BpoRepo):
             self,
             bpoId,
     ):
-        super().__init__(bpoId)
-        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
+        super().__init__(bpoId, "rbxe")
+        if not bpo.EffectiveBpos.givenBpoIdGetBpo(bpoId):
             b_io.eh.critical_usageError(f"Missing BPO for {bpoId}")
             return
 
@@ -209,8 +236,8 @@ class BpoRepo_BxeTree(BpoRepo):
             self,
             bpoId,
     ):
-        super().__init__(bpoId)
-        if not EffectiveBpos.givenBpoIdGetBpo(bpoId):
+        super().__init__(bpoId, "bxeTree")
+        if not bpo.EffectiveBpos.givenBpoIdGetBpo(bpoId):
             b_io.eh.critical_usageError(f"Missing BPO for {bpoId}")
             return
 
@@ -269,17 +296,21 @@ def examples_csu(
     if sectionTitle == 'default':
         cs.examples.menuChapter('*CMDB Container FileParams Access And Management --- Applicable To BPO Containers*')
 
-    thisBpoId = "pmp_HSS-1012"
-    thisEnvRelPath = 'cmdb/describe'
+    this_bpoId = "pmp_HSS-1012"
+    this_bpoRepoName = 'cmdb'
 
-    cmnd('bpoRepo_gitDo', pars=od([('bpoId', thisBpoId), ('envRelPath', thisEnvRelPath)]), args="getExamples")
-    cmnd('bpoRepo_gitDo', pars=od([('bpoId', thisBpoId), ('envRelPath', thisEnvRelPath)]), args="setExamples")
+    cmnd('bpoRepo_gitAction', wrapper="bpoAcctManage.sh -i bpoIdsList |",
+         pars=od([('bpoId', this_bpoId), ('bpoRepoName', this_bpoRepoName)]), args="status")
+
+    cmnd('bpoRepo_gitAction', pars=od([('bpoId', this_bpoId), ('bpoRepoName', this_bpoRepoName)]), args="clone")
+
+    cmnd('bpoRepo_gitAction', pars=od([('bpoId', this_bpoId), ('bpoRepoName', this_bpoRepoName)]), args="repoCreateAndPush_withIcm")
 
 
     cs.examples.menuChapter('*List repos for bpos*')
 
-
-    cmnd('bpoReposNameList', wrapper="bpoAcctManage.sh -i bpoIdsList |", args="getExamples")
+    cmnd('bpoReposNameList', wrapper="bpoAcctManage.sh -i bpoIdsList |", args="pmp_HSS-1012")
+    cmnd('bpoReposNameList',)
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
 """
@@ -288,57 +319,89 @@ def examples_csu(
 ####+END:
 
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bpoRepo_gitAction" :comment "Returns the type of bpoId" :parsMand "bpoId" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv "stdinArgs"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bpoRepo_gitAction" :comment "create/clone/push/pull" :parsMand "bpoRepoName" :parsOpt "bpoId" :argsMin 1 :argsMax 1 :pyInv "pyStdinParams"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bpoRepo_gitAction>>  *Returns the type of bpoId*  =verify= parsMand=bpoId argsMin=1 argsMax=1 ro=cli pyInv=stdinArgs   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bpoRepo_gitAction>>  *create/clone/push/pull*  =verify= parsMand=bpoRepoName parsOpt=bpoId argsMin=1 argsMax=1 ro=cli pyInv=pyStdinParams   [[elisp:(org-cycle)][| ]]
 #+end_org """
 class bpoRepo_gitAction(cs.Cmnd):
-    cmndParamsMandatory = [ 'bpoId', ]
-    cmndParamsOptional = [ ]
+    cmndParamsMandatory = [ 'bpoRepoName', ]
+    cmndParamsOptional = [ 'bpoId', ]
     cmndArgsLen = {'Min': 1, 'Max': 1,}
 
     @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
              rtInv: cs.RtInvoker,
              cmndOutcome: b.op.Outcome,
-             bpoId: typing.Optional[str]=None,  # Cs Mandatory Param
+             bpoRepoName: typing.Optional[str]=None,  # Cs Mandatory Param
+             bpoId: typing.Optional[str]=None,  # Cs Optional Param
              argsList: typing.Optional[list[str]]=None,  # CsArgs
-             stdinArgs: typing.Any=None,   # pyInv Argument
+             pyStdinParams: typing.Any=None,   # pyInv Argument
     ) -> b.op.Outcome:
-        """Returns the type of bpoId"""
+        """create/clone/push/pull"""
         failed = b_io.eh.badOutcome
-        callParamsDict = {'bpoId': bpoId, }
+        callParamsDict = {'bpoRepoName': bpoRepoName, 'bpoId': bpoId, }
         if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
             return failed(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
+        bpoRepoName = csParam.mappedValue('bpoRepoName', bpoRepoName)
         bpoId = csParam.mappedValue('bpoId', bpoId)
 ####+END:
 
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]] /arg1/ specifies a git action. stdin is a list of bpoIds
+        #+end_org """)
+
+        self.captureRunStr(""" #+begin_org
+#+begin_src sh :results output :session shared
+  csExamples.cs --par1Example="par1Mantory" --par2Example="par2Optional" -i parsArgsStdinCmndResult arg1 argTwo
+#+end_src
+#+RESULTS:
+:
+        #+end_org """)
+        if self.justCaptureP(): return cmndOutcome
+
         cmndArgsSpecDict = self.cmndArgsSpec()
-
         action = self.cmndArgsGet("0", cmndArgsSpecDict, argsList)
-        actionArgs = self.cmndArgsGet("1&9999", cmndArgsSpecDict, argsList)
 
-        #fpsBase = os.path.join(bpo.bpoBaseDir_obtain(bpoId), envRelPath)
+        def processEach(each):
+            bpoRepo = BpoRepo(bpoId=bpoId, bpoRepoName=bpoRepoName)
 
-        basedFps = b.pattern.sameInstance(CmdbCntnr_FPs, bpoId, envRelPath)
+            # NOTYET, do this with getattr
+            if action == "repoCreateAndPush":
+                bpoRepo.repoCreateAndPush()
+            elif  action == "status":
+                bpoRepo.repoStatus()
+            elif  action == "repoCreateAndPush_withIcm":
+                bpoRepo.repoCreateAndPush_withIcm()
+            else:
+                b_io.eh.critical_usageError("")
 
-        fpsBase = basedFps.basePath_obtain()
+            # print(f"""process.py -v 30 --bpoId={each} --bpoRepoName={bpoRepoName} -i action {action}""")
 
-        if action == "getExamples" or action == "setExamples":
-            # print(f"With fpBase={fpsBase} and cls={CmdbCntnr_FPs} name={basedFps.__class__.__name__}.")
-            if b.fpCls.fpParamsReveal(cmndOutcome=cmndOutcome).cmnd(
-                    rtInv=rtInv,
-                    cmndOutcome=cmndOutcome,
-                    fpBase=fpsBase,
-                    cls=basedFps.__class__.__name__,
-                    argsList=[action],
-            ).isProblematic(): return(b_io.eh.badOutcome(cmndOutcome))
+####+BEGIN: b:py3:func/processStdinAsBpoIdParams :comment with-processEach
+        """ #+begin_org
+***  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  processStdinAsBpoIdParams [[elisp:(outline-show-subtree+toggle)][||]]  =with-processEach=  [[elisp:(org-cycle)][| ]]
+        #+end_org """
+        if not pyStdinParams:
+            pyStdinParams = b_io.stdin.read()
 
-        elif action == "menu":
-            print(f"With fpBase={fpsBase} and cls={CmdbCntnr_FPs} NOTYET.")
-        else:
-            print(f"bad input {action}")
+        def processStdinAsBpoIdParams():
+
+            if bpoId:
+                effectiveParams = [ bpoId ] + pyStdinParams.split()
+            else:
+                effectiveParams = pyStdinParams.split()
+
+            if len(effectiveParams) == 0:
+                b_io.eh.critical_usageError(
+                    "Missing Input Params: One of bpoId, stdin or pyStdinParams; should have a param."
+                )
+
+            for each in effectiveParams:
+                processEach(each)
+
+        processStdinAsBpoIdParams()
+####+END:
 
         return(cmndOutcome)
 
@@ -411,9 +474,6 @@ Variations of this are captured as snippets to be used.
 #+end_src
 #+RESULTS:
 :
-: cmndArgs= arg1  argTwo
-: stdin instead of methodInvokeArg =
-: cmndParams= par1Mantory par2Optional
 : OpError.Success
         #+end_org """)
         if self.justCaptureP(): return cmndOutcome
@@ -435,7 +495,9 @@ Variations of this are captured as snippets to be used.
             effectiveArgs = cliArgs + pyStdinArgs.split()
 
             if len(effectiveArgs) == 0:
-                b_io.eh.critical_usageError("Missing Input: One of cliArgs, stdin or pyArgs; should have an input.")
+                b_io.eh.critical_usageError(
+                    "Missing Input: One of cliArgs, stdin or pyArgs; should have an input."
+                )
 
             for each in effectiveArgs:
                 processEach(each)
@@ -461,7 +523,7 @@ Variations of this are captured as snippets to be used.
         cmndArgsSpecDict = cs.arg.CmndArgsSpecDict()
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&9999",
-            argName="actionArgs",
+            argName="inputs",
             argChoices=[],
             argDescription="Rest of args for use by action"
         )

@@ -90,6 +90,8 @@ import enum
 
 from bisos.basics import pattern
 
+from bisos.bpo import bpoRepo
+
 ####+BEGIN: bx:dblock:python:section :title "Enumerations"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Enumerations*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
@@ -347,8 +349,8 @@ class Bpo(object):
         self.bpoName = bpoId
         self.bpoBaseDir = bpoBaseDir_obtain(bpoId)
 
-        self.repo_rbxe = BpoRepo_Rbxe(bpoId)
-        self.repo_bxeTree = BpoRepo_BxeTree(bpoId)
+        self.repo_rbxe = bpoRepo.BpoRepo_Rbxe(bpoId)
+        self.repo_bxeTree = bpoRepo.BpoRepo_BxeTree(bpoId)
 
 
 
