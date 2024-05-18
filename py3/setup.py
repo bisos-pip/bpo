@@ -1,57 +1,60 @@
 #!/usr/bin/env python
 
 import setuptools
-# import sys
+import re
 
 
 def readme():
-    with open('TITLE.txt') as f:
-        return f.readline().rstrip('\n')
-
+    with open('./README.org') as file:
+        while line := file.readline():
+            if match := re.search(r'^#\+title: (.*)',  line.rstrip()):
+                return match.group(1)
+            return "MISSING TITLE in ./README.org"
 
 def longDescription():
-    with open('README.rst') as f:
-        return f.read()
+    try:
+        import pypandoc
+    except ImportError:
+        result = "warning: pypandoc module not found, could not convert to RST"
+        return result
+    return pypandoc.convert_file('README.org', 'rst')
 
+####+BEGIN: b:py3:pypi/nextVersion :increment 0.01
 
-# from setuphelpers import get_version, require_python
-# from setuptools import setup
+def pkgVersion(): return '0.41'
+####+END:
 
-
-# __version__ = get_version('unisos/icm/__init__.py')
-__version__ = '0.5'
-
+####+BEGIN: b:py3:pypi/requires :extras ()
 
 requires = [
-    'unisos.icm',
+"blee",
+"blee.icmPlayer",
+"bisos",
+"bisos.b",
+"bisos.basics",
+"bisos.crypt",
+"bisos.currents",
+"bisos.icm",
+"bisos.pals",
+"from",
 ]
+####+END:
 
-
-# print('Setting up under python version %s' % sys.version)
-# print('Requirements: %s' % ','.join(requires))
+####+BEGIN: b:py3:pypi/scripts :comment ""
 
 scripts = [
-    "./bin/bpoManage.cs",
-    # "./bin/bpoAaisManage.py",
+'./bin/bpoManage.cs',
 ]
+####+END:
 
 
 setuptools.setup(
     name='bisos.bpo',
-    version=__version__,
-    namespace_packages=['bisos'],
+    version=pkgVersion(),
+    # namespace_packages=['bisos'],
     packages=setuptools.find_packages(),
     scripts=scripts,
-    # data_files=[
-    #     ('pkgInfo', ["unisos/pkgInfo/fp/icmsPkgName/value"]),
-    # ],
-    # package_dir={'unisos.marme': 'unisos'},
-    # package_data={
-    #     'unisos.marme': ['pkgInfo/fp/icmsPkgName/value'],
-    # },
-    # package_data={
-    #     '': ['unisos/marme/resolv.conf'],
-    # },
+    requires=requires,
     include_package_data=True,
     zip_safe=False,
     author='Mohsen Banan',
