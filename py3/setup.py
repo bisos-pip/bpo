@@ -19,24 +19,26 @@ def longDescription():
         return result
     return pypandoc.convert_file('README.org', 'rst')
 
-####+BEGIN: b:py3:pypi/nextVersion :increment 0.01
+####+BEGINNOT: b:py3:pypi/nextVersion :increment 0.01
 
-def pkgVersion(): return '0.41'
+def pkgVersion(): return '0.5'
 ####+END:
 
-####+BEGIN: b:py3:pypi/requires :extras ()
+####+BEGIN: b:py3:pypi/requires :extras ("pygit2")
 
-requires = [
+requires = [ 
 "blee",
 "blee.icmPlayer",
 "bisos",
 "bisos.b",
 "bisos.basics",
+"bisos.common",
 "bisos.crypt",
 "bisos.currents",
 "bisos.icm",
 "bisos.pals",
 "from",
+"pygit2",
 ]
 ####+END:
 
