@@ -41,11 +41,11 @@ def longDescription():
 ####+END:
 
 # b:py3:pypi:setup/version Arguments  :forSys t :forPyPi t :constant "666"
-####+BEGIN: b:py3:pypi:setup/version :comment "Auto Detected"
+####+BEGIN: b:py3:pypi:setup/version :comment "Auto Detected" :constant "0.4"
 
-# ./pypiUploadVer DID NOT exist -- forPypiVersion=0.41 -- forSysVersion=0.5 -- constant=NA
+# ./pypiUploadVer DID NOT exist -- forPypiVersion=0.42 -- forSysVersion=0.5 -- constant=0.4
 def pkgVersion():
-        return '0.5'
+        return '0.4'
 
 ####+END:
 
@@ -63,6 +63,7 @@ requires = [
 "bisos.currents",
 "bisos.icm",
 "bisos.pals",
+"bisos.platform",
 ]
 ####+END:
 
