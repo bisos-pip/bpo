@@ -2,9 +2,6 @@
 bisos.bpo: BISOS Portable Objects
 =================================
 
-:Author: Mohsen BANAN
-:Date:   <2024-02-19 Mon 16:27>
-
 .. contents::
    :depth: 3
 ..
