@@ -103,7 +103,7 @@ G = icm.IcmGlobalContext()
 # G.icmLibsAppend = __file__
 # G.icmCmndsLibsAppend = __file__
 
-from blee.icmPlayer import bleep
+from bisos.csPlayer import bleep
 ####+END:
 
 from bisos.platform import bxPlatformConfig
