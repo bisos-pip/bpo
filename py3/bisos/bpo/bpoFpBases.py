@@ -105,7 +105,8 @@ import __main__
 
 from bisos.basics import pattern
 
-#from bisos.icm import clsMethod
+# NOTYET, REVISIT --from bis os.icm import clsMethod
+
 from bisos.b import fp
 
 #from bisos.bpo import bpo
