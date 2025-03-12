@@ -105,53 +105,6 @@ import abc
 #+end_org """
 ####+END:
 
-
-####+BEGIN: b:py3:cs:func/typing :funcName "examples_csu" :funcType "eType" :retType "" :deco "default" :argsList ""
-""" #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-eType  [[elisp:(outline-show-subtree+toggle)][||]] /examples_csu/ deco=default  deco=default   [[elisp:(org-cycle)][| ]]
-#+end_org """
-@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-def examples_csu(
-####+END:
-        bpoId: str,
-        envRelPath: str,
-        sectionTitle: typing.AnyStr = '',
-) -> None:
-    """ #+begin_org
-** [[elisp:(org-cycle)][| *DocStr | ] Examples of Service Access Instance Commands.
-    #+end_org """
-
-    def cpsInit(): return collections.OrderedDict()
-    def menuItem(verbosity): cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity=verbosity) # 'little' or 'none'
-
-    if sectionTitle == 'default':
-        cs.examples.menuChapter('*Remote Operations Management*')
-
-    icmWrapper = ""
-    cmndName = "ro_sapCreate"
-    cps = cpsInit() ; cps['perfName'] = "localhost" ; cps['rosmu'] = "csB2Examples.cs"
-    cmndArgs = "" ;
-
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='none', icmWrapper=icmWrapper)
-
-    #cmndName = "pyCmndInvOf_parsArgsStdinCmndResult" ; cps = cpsInit() ; cmndArgs = "" ;
-    #menuItem(verbosity='none')
-
-    cs.examples.menuChapter('FileParams Access And Management*')
-
-    icmWrapper = ""
-    cmndName = "marmeeAasIn_fps"
-    cps = cpsInit() ; cps['bpoId'] = bpoId ; cps['envRelPath'] = envRelPath
-    cmndArgs = "list" ;
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='none', icmWrapper=icmWrapper)
-
-    icmWrapper = ""
-    cmndName = "marmeeAasIn_fps"
-    cps = cpsInit() ; cps['bpoId'] = bpoId ; cps['envRelPath'] = envRelPath
-    cmndArgs = "menu" ;
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='none', icmWrapper=icmWrapper)
-
-
 ####+BEGIN: bx:dblock:python:class :className "BpoFpsCls" :superClass "b.fpCls.BaseDir, abc.ABC" :comment "" :classType "basic"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoFpsCls/ b.fpCls.BaseDir, abc.ABC  [[elisp:(org-cycle)][| ]]
@@ -171,21 +124,25 @@ class BpoFpsCls(b.fpCls.BaseDir, abc.ABC):
 ####+END:
             self,
             bpoId: str="",
+            bpoFpsRelPath: os.PathLike = pathlib.Path("_null_"),
             envRelPath: str="",
             fpBase: str="",
     ):
 
+        self.bpoId = bpoId
+        self.bpoFpsRelPath = bpoFpsRelPath
+
         if fpBase:
             fileSysPath = fpBase
+        elif bpoFpsRelPath != pathlib.Path("_null_"):
+            bpoBaseDir = pathlib.Path(bpo.bpoBaseDir_obtain(bpoId))
+            fileSysPath = bpoBaseDir / bpoFpsRelPath
         else:
             self.bpoId = bpoId
             self.envRelPath = envRelPath
-            fileSysPath = self.basePath_obtain()
+            fileSysPath = self.basePath_obtain()  # NOTYET:: NB:This is done in marmeeOauth and is the wrong way
 
         super().__init__(fileSysPath,)
-
-     # fps_asIcmParamsAdd is an abstract method.
-     # fps_manifestDictBuild is an abstract method.
 
 ####+BEGIN: b:py3:cs:method/typing :methodName "fpCrypt_setParam" :deco "default"
     """ #+begin_org
@@ -261,27 +218,6 @@ First we obtain fpsKey from the BPO's fpsVault.
         encryptedParamValue.parValueSet(paramValue)
 
         return encryptedParamValue
-
-
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_getParam" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_getParam/ deco=default  deco=default   [[elisp:(org-cycle)][| ]]
-    #+end_org """
-    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_getParam(
-####+END:
-            self,
-            paramName,
-    ):
-        """Returns a dict of FileParam s. Reads in all FPs at self.fps_absBasePath()."""
-        # namesWithAbsPath = self.fps_namesWithAbsPath()
-        namesWithAbsPath = self.fps_manifestDictBuild()
-        #print(namesWithAbsPath)
-        #fpBase = os.path.abspath(namesWithAbsPath[paramName])
-        fpBase = self.fileTreeBaseGet()
-        #print(fpBase)
-        paramValue = b.fp.FileParamReadFrom(fpBase, paramName,)
-        return paramValue
 
 ####+BEGIN: b:py3:cs:framework/endOfFile :basedOn "classification"
 """ #+begin_org

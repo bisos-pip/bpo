@@ -279,6 +279,60 @@ def givenPathObtainBpoId(
         bpoId = pathComps[4]
     return bpoId
 
+
+
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "obtainBpoIdFromFps" :comment "" :extent "verify" :ro "cli" :parsMand "" :parsOpt "" :argsMin 1 :argsMax 1 :pyInv ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<obtainBpoIdFromFps>>  =verify= argsMin=1 argsMax=1 ro=cli   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class obtainBpoIdFromFps(cs.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {}
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return failed(cmndOutcome)
+        cmndArgsSpecDict = self.cmndArgsSpec()
+####+END:
+        if self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  argsList[0] should be base of a bpo. Then use rbxe/bxeDesc to construct bpoId
+        #+end_org """): return(cmndOutcome)
+
+        if argsList is None:
+            return failed(cmndOutcome)
+        inPath = argsList[0]
+
+        try:
+            fileParam = b.fp.FileParamReadFromPath(f"{inPath}/rbxe/bxeDesc/bxePrefix")
+        except IOError:
+            cmndOutcome.set(opError="IOError", opErrInfo=f"Missing parRoot={parRoot} parName={parName}")
+            return failed(cmndOutcome)
+        bxePrefix = fileParam.parValueGet()
+
+        try:
+            fileParam = b.fp.FileParamReadFromPath(f"{inPath}/rbxe/bxeDesc/name/")
+        except IOError:
+            cmndOutcome.set(opError="IOError", opErrInfo=f"Missing parRoot={parRoot} parName={parName}")
+            return failed(cmndOutcome)
+        name = fileParam.parValueGet()
+
+        siteBpoId = f"{bxePrefix}_{name}"
+
+        return cmndOutcome.set(
+            opResults=siteBpoId,
+        )
+
+
+
 ####+BEGIN: b:py3:cs:func/typing :funcName "givenPathObtainRelPath" :funcType "extTyped" :deco "track"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-extTyped [[elisp:(outline-show-subtree+toggle)][||]] /givenPathObtainRelPath/  deco=track  [[elisp:(org-cycle)][| ]]
@@ -646,7 +700,7 @@ class forPathObtainBpoId(cs.Cmnd):
 ####+END:
         retVal = givenPathObtainBpoId(argsList[0])
 
-        print(retVal)
+        # print(retVal)
 
         return cmndOutcome.set(
             opError=b.op.notAsFailure(retVal),

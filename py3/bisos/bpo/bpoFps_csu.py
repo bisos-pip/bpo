@@ -81,6 +81,8 @@ from bisos.common import csParam
 import collections
 ####+END:
 
+from bisos.b import fpCls
+
 ####+BEGIN: b:py3:cs:orgItem/section :title "CSU-Lib Examples" :comment "-- Providing examples_csu"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  /Section/    [[elisp:(outline-show-subtree+toggle)][||]] *CSU-Lib Examples* -- Providing examples_csu  [[elisp:(org-cycle)][| ]]
@@ -105,112 +107,147 @@ import __main__
 
 from bisos.basics import pattern
 
-# NOTYET, REVISIT --from bis os.icm import clsMethod
-
 from bisos.b import fp
 
 #from bisos.bpo import bpo
-from bisos.pals import palsBpo
 
-####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
-"""
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
-"""
-####+END:
+import black
 
-
-####+BEGIN: b:py3:class/decl :className "BpoFpBase" :superClass "object" :comment "" :classType "basic"
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "examples_csu" :comment "" :parsMand "bpoId cls" :parsOpt "sectionTitle" :argsMin 0 :argsMax 0 :pyInv ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Cls-basic  [[elisp:(outline-show-subtree+toggle)][||]] /BpoFpBase/  superClass=object  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<examples_csu>>  =verify= parsMand=bpoId cls parsOpt=sectionTitle ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class BpoFpBase(object):
+class examples_csu(cs.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', 'cls', ]
+    cmndParamsOptional = [ 'sectionTitle', ]
+    cmndArgsLen = {'Min': 0, 'Max': 0,}
 
-####+END:
-    """
-** Links a base within a BPO to a ICM-FPs class
-"""
-####+BEGIN: b:py3:cs:method/typing :methodName "__init__" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /__init__/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
     @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def __init__(
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             bpoId: typing.Optional[str]=None,  # Cs Mandatory Param
+             cls: typing.Optional[str]=None,  # Cs Mandatory Param
+             sectionTitle: typing.Optional[str]=None,  # Cs Optional Param
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {'bpoId': bpoId, 'cls': cls, 'sectionTitle': sectionTitle, }
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, None).isProblematic():
+            return failed(cmndOutcome)
+        bpoId = csParam.mappedValue('bpoId', bpoId)
+        cls = csParam.mappedValue('cls', cls)
+        sectionTitle = csParam.mappedValue('sectionTitle', sectionTitle)
 ####+END:
-            self,
-            bpoId,
-            fileSysPath,
-    ):
-        self.bpoId = bpoId
-        self.fpsBaseDir = None
-        self.fpsBaseInst = None
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Basic example command.
+        #+end_org """)
+
+        bpoFpsCls = getattr(__main__, cls)
+        thisBpoFpCls = b.pattern.sameInstance(bpoFpsCls, bpoId=bpoId,)
+        fpBase = thisBpoFpCls.basePath_obtain()
+
+        od = collections.OrderedDict
+        cmnd = cs.examples.cmndEnter
+        # literal = cs.examples.execInsert
+
+        cs.examples.menuChapter('*BPO FILE_Params Access And Management*')
+
+        bpoIdClsPars = od([('bpoId', bpoId), ('cls', cls)])
+
+        cmnd('bpoFpsClsInfo', pars=bpoIdClsPars, comment="# bpoFpsRelPath, fpParamsManifest, cryptInfo")
+        cmnd('bpoFpsClsFullReport', pars=bpoIdClsPars, comment="# bpoFpsRelPath, fpParamsManifest, cryptInfo")
+
+        fpCls.examples_csu().pyCmnd(fpBase=fpBase, cls=cls)
+
+        # literal("facter networking.interfaces.lo.bindings[0].address  # Fails, you can't do that")
+
+        return(cmndOutcome)
 
 
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_absBasePath" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_absBasePath/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bpoFpsClsFullReport" :extent "verify" :parsMand "bpoId cls" :parsOpt "" :argsMin 0 :argsMax 0 :pyInv ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bpoFpsClsFullReport>>  =verify= parsMand=bpoId cls ro=cli   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class bpoFpsClsFullReport(cs.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 0, 'Max': 0,}
+
     @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_absBasePath(
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             bpoId: typing.Optional[str]=None,  # Cs Mandatory Param
+             cls: typing.Optional[str]=None,  # Cs Mandatory Param
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {'bpoId': bpoId, 'cls': cls, }
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, None).isProblematic():
+            return failed(cmndOutcome)
+        bpoId = csParam.mappedValue('bpoId', bpoId)
+        cls = csParam.mappedValue('cls', cls)
 ####+END:
-           self,
-    ):
-        return typing.cast(str, self.fpsBaseDir)
+
+        bpoFpsCls = getattr(__main__, cls)
+        thisBpoFpCls = b.pattern.sameInstance(bpoFpsCls, bpoId=bpoId,)
+        fpBase = thisBpoFpCls.basePath_obtain()
+
+        if rtInv.outs:
+            print("bpo.bpoFps_csu.bpoFpsClsInfo()::")
+
+        cmndOutcome = bpoFpsClsInfo().pyCmnd(bpoId=bpoId, cls=cls)
+
+        if rtInv.outs:
+            print("b.fpCls.fpBaseClsFullReport()::")
+
+        cmndOutcome = b.fpCls.fpBaseClsFullReport().pyCmnd(rtInv=rtInv, fpBase=fpBase, cls=cls)
+
+        return cmndOutcome.set(opResults=None)
 
 
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_absBasePathSet" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_absBasePathSet/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "bpoFpsClsInfo" :parsMand "bpoId cls" :parsOpt "" :argsMin 0 :argsMax 0 :pyInv ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<bpoFpsClsInfo>>  =verify= parsMand=bpoId cls ro=cli   [[elisp:(org-cycle)][| ]]
+#+end_org """
+class bpoFpsClsInfo(cs.Cmnd):
+    cmndParamsMandatory = [ 'bpoId', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 0, 'Max': 0,}
+
     @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_absBasePathSet(
+    def cmnd(self,
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             bpoId: typing.Optional[str]=None,  # Cs Mandatory Param
+             cls: typing.Optional[str]=None,  # Cs Mandatory Param
+    ) -> b.op.Outcome:
+
+        failed = b_io.eh.badOutcome
+        callParamsDict = {'bpoId': bpoId, 'cls': cls, }
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, None).isProblematic():
+            return failed(cmndOutcome)
+        bpoId = csParam.mappedValue('bpoId', bpoId)
+        cls = csParam.mappedValue('cls', cls)
 ####+END:
-            self,
-            fpsBaseDir,
-    ):
-        self.fpsBaseDir = fpsBaseDir
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Obtain fpBase and manifest from class.
+        #+end_org """)
 
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_baseInstanceMake" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_baseInstanceMake/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
-    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_baseInstanceMake(
-####+END:
-            self,
-            BaseClassName,
-    ):
-        fpsPath = self.fps_absBasePath()
-        self.fpsBaseInst = pattern.sameInstance(
-            BaseClassName,
-            fpsPath,
-        )
-        return self.fpsBaseInst
+        bpoFpsCls = getattr(__main__, cls)
+        thisBpoFpCls = b.pattern.sameInstance(bpoFpsCls, bpoId=bpoId,)
+        fpBase = thisBpoFpCls.basePath_obtain()
 
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_baseInstanceGet" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_baseInstanceGet/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
-    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_baseInstanceGet(
-####+END:
-            self,
-    ):
-        return self.fpsBaseInst
+        print(f"bpoId={thisBpoFpCls.bpoId}")
+        print(f"bpoFpsRelPath={thisBpoFpCls.bpoFpsRelPath}")
+        print(f"cryptInfo=NOTYET")
+        print(f"fpBase={fpBase}")
+        print(f"cls={cls}")
+        formatted = black.format_str(str(thisBpoFpCls.fps_manifestGet().keys()), mode=black.Mode())
+        print(formatted)
 
-
-####+BEGIN: b:py3:cs:method/typing :methodName "fps_baseMake" :deco "default"
-    """ #+begin_org
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-     [[elisp:(outline-show-subtree+toggle)][||]] /fps_baseMake/  deco=default  [[elisp:(org-cycle)][| ]]
-    #+end_org """
-    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def fps_baseMake(
-####+END:
-            self,
-    ):
-        b_io.eh.problem_usageError("This should have been specified in the subClass")
-        return None
-
-
+        return(cmndOutcome)
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 0 :title " ~End Of Editable Text~ "
 """ #+begin_org
