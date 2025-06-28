@@ -43,7 +43,7 @@ def longDescription():
 # b:py3:pypi:setup/version Arguments  :forSys t :forPyPi t :constant "666"
 ####+BEGIN: b:py3:pypi:setup/version :comment "Auto Detected"
 
-# ./pypiUploadVer DID NOT exist -- forPypiVersion=0.47 -- forLocalVersion=0.4 -- constant=NA
+# ./pypiUploadVer DID NOT exist -- forPypiVersion=0.48 -- forLocalVersion=0.4 -- constant=NA
 def pkgVersion():
         return '0.4'
 
@@ -62,6 +62,7 @@ requires = [
 "bisos.currents",
 "bisos.pals",
 "bisos.platform",
+"setuptools==75.8.0",
 ]
 ####+END:
 
@@ -71,8 +72,6 @@ requires = [
 scripts = [
 'bin/bpoManage.cs',
 'bin/bpoRepos.cs',
-'bin/outcome.out',
-'bin/pr.out',
 ]
 ####+END:
 
